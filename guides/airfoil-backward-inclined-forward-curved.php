@@ -42,6 +42,10 @@
 <h3>Airfoil</h3>
 <p>Large, clean-air supply fans with long running hours where every point of efficiency pays back. Avoid in airstreams carrying particulate that erodes the thin leading edge, or where corrosive condensation could enter a hollow blade. For contaminated industrial air, see <a href="<?= url('guides/radial-blade-paddle-wheel-fans') ?>">radial blade and paddle wheel fans</a>.</p>
 
+<h2>Replacing one blade type with another</h2>
+<p>Swapping a forward curved fan for a backward inclined or airfoil wheel during a retrofit is a common efficiency upgrade, but it is not a drop-in change. The new wheel runs at roughly twice the speed for the same duty, so bearings, shaft and drive must suit the higher speed. The wheel is also larger in diameter, which may not fit the existing housing or cabinet. Many retrofits therefore replace the whole fan, often with a plenum fan or a small array, rather than the wheel alone.</p>
+<p>Going the other way, from airfoil to backward inclined, usually happens for durability reasons. Expect a small efficiency loss and slightly higher brake horsepower at the same duty; check that the existing motor still has margin before making the change.</p>
+
 <h2>Questions to ask when comparing selections</h2>
 <ul>
 <li>Which blade shape is quoted, and is it airfoil, flat BI or backward curved?</li>

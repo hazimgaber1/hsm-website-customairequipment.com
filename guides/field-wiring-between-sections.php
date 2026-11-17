@@ -16,6 +16,8 @@
 </table>
 <p>Many units use a combination: plug connectors for controls and low-voltage signals, junction boxes for 120 V lighting and receptacle circuits, and field-pulled conductors for motor feeders where a VFD sits in a different section from its motor.</p>
 
+<p>Whichever method is used, the factory normally checks each crossing during run testing with the harness connected, then disconnects it for shipping. That means a correct reconnection restores a circuit that has already been proven, which is a strong argument for using the factory harness rather than re-pulling conductors in the field unless there is a good reason.</p>
+
 <h2>Separating power and control wiring</h2>
 <p>Split crossings follow the same separation rules as the rest of the unit. Line-voltage motor conductors and VFD output cables are kept apart from analog sensor wiring and communication cables, either in separate raceways or with barriers in shared boxes. VFD output cables in particular radiate electrical noise and can corrupt 4 to 20 mA or 0 to 10 V signals if they share a connector. Shielded cable shields need to be continued across the split, terminated at one end only as the wiring diagram shows, so the shield does not become a ground loop.</p>
 <p class="warn">Class 2 low-voltage circuits and power circuits generally cannot share the same connector or terminal strip without proper separation. Follow the wiring diagram and the electrical code adopted in your jurisdiction.</p>

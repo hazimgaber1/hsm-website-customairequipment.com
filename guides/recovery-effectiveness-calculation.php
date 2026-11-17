@@ -41,6 +41,15 @@
 <p>A plate core with 65 percent sensible effectiveness handles 6,000 cfm each way. Outdoor air is 5 F and exhaust is 70 F at 25 percent RH.</p>
 <p>Supply leaving = 5 + 0.65 × (70 − 5) = 47.3 F. The heating recovered is 1.08 × 6,000 × 42.3 ≈ 274,000 Btu/h. Exhaust leaving = 70 − 42.3 = 27.7 F, which is below freezing and below the exhaust dew point of about 33 F, so this core will condense and is at frost risk. Checking that properly is covered in <a href="<?= url('guides/frost-threshold-temperature-calculation') ?>">calculating the frost threshold temperature</a>.</p>
 
+<h2>When a sensible device condenses</h2>
+<p>The equations assume the humidity ratio of each stream changes only through desiccant transfer. A plate or sensible wheel that cools exhaust below its dew point removes water from the exhaust by condensation, and that released latent heat warms the plates. The supply then leaves slightly warmer than the dry calculation predicts, and the exhaust leaves saturated rather than at the calculated dry-bulb with its original moisture.</p>
+<p>For screening, the dry calculation is conservative on supply temperature and is acceptable. For a frost or drainage check, assume the exhaust leaves at saturation and compute how much water condenses:</p>
+<p class="formula">Condensate (lb/h) = 4.5 × CFM_exhaust × (W_entering − W_saturated at leaving temperature)</p>
+<p>The 4.5 factor converts standard cfm to pounds of dry air per hour, and humidity ratios are in pounds of water per pound of dry air. Manufacturer selection software accounts for condensing performance directly and should be used for final values.</p>
+
+<h2>Checking results on a psychrometric chart</h2>
+<p>Plot the outdoor and exhaust entering states. For an enthalpy device with similar sensible and latent effectiveness, the supply leaving state lies close to the straight line between them, roughly the effectiveness fraction of the way from outdoor toward exhaust. If your calculated point sits far off that line, recheck the humidity ratio arithmetic. For a sensible device, the supply leaving point moves horizontally from the outdoor state, at constant humidity ratio. These two quick visual checks catch most transcription errors in spreadsheets.</p>
+
 <h2>Common mistakes</h2>
 <ul>
 <li><strong>Using cfm ratios at very different densities.</strong> If one stream is much hotter or at a different elevation, convert to mass flow.</li>

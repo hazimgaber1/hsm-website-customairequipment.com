@@ -58,6 +58,22 @@
 <li><strong>Diversity:</strong> for VAV systems serving many zones, the AHU airflow is based on the block load, not the sum of zone peaks.</li>
 </ul>
 <p>Airflow is the starting point; pressure is next. Once cfm is fixed, build the <a href="<?= url('guides/total-static-pressure-budget') ?>">total static pressure budget</a> before selecting any fan.</p>
+<h2>Second worked example in SI units</h2>
+<p>A classroom wing in a Canadian school has a peak room sensible load of 45 kW. The rooms are held at 23°C and the delivered supply temperature is 14°C, a ΔT of 9 K. The site is near sea level.</p>
+<ol>
+<li>Airflow = 45,000 W ÷ (1.2 × 9) = 4,167 L/s.</li>
+<li>In imperial terms: 4,167 × 2.119 = 8,830 cfm.</li>
+<li>Cross-check with the imperial equation: 45 kW is about 153,500 Btu/h; ΔT is 16.2°F; 153,500 ÷ (1.08 × 16.2) = 8,770 cfm. The small difference comes from rounding the constants.</li>
+</ol>
+<p>Schools often have ventilation requirements large enough to rival the load-based airflow, so compare this result against the outdoor air required for the occupancy before fixing the design airflow.</p>
+<h2>Mistakes that skew the answer</h2>
+<ul>
+<li>Using total load, including latent, in place of sensible load. This oversizes airflow and the whole unit.</li>
+<li>Taking ΔT from the coil leaving temperature instead of the temperature actually delivered to the room after fan and duct heat.</li>
+<li>Applying a sea-level constant at elevation, which undersizes the unit in mountain cities.</li>
+<li>Summing zone peaks for a VAV unit instead of using the coincident block load.</li>
+<li>Rounding up at every step. Round once, at the end, to a sensible scheduled value.</li>
+</ul>
 <?php guide_end([
     ['Where does the 1.08 in the sensible heat formula come from?', 'It is standard air density of 0.075 lb per cubic foot, multiplied by a specific heat of 0.24 Btu per pound per degree F, multiplied by 60 minutes per hour. The product is 1.08. It changes when air density changes, such as at high elevation.'],
     ['How do I calculate cfm from tons of cooling?', 'Tons measure total load, while airflow is set by sensible load. Convert the sensible part of the load to Btu per hour and divide by 1.08 times the room to supply temperature difference. Rules of thumb such as 400 cfm per ton are only rough checks.'],

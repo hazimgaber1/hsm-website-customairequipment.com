@@ -47,6 +47,13 @@
 <p>For a room with an estimated 0.4 ft² of effective leakage area (door undercuts and gaps) held at 0.04 in. w.g. (10 Pa) above the corridor, Q ≈ 2,610 × 0.4 × 0.2 = 209 cfm. Add the leakage of every pressurized room, plus exhaust, and compare against occupant ventilation. The largest total sets the makeup unit; the pressure steps themselves are designed in <a href="<?= url('guides/cleanroom-pressure-cascade') ?>">how to design a cleanroom pressure cascade</a>.</p>
 <p>In the ISO 7 example, outdoor air might be about 600 cfm of the 7,200 cfm supply, roughly 8%. The rest is recirculated through a recirculation air handler or fan filter units.</p>
 
+<h2>Common calculation mistakes</h2>
+<ul>
+<li>Using gross room volume when large equipment fills much of the space; the error is usually small, but state which volume was used.</li>
+<li>Forgetting that terminal filter airflow ratings assume a certain face velocity; running filters well above it raises pressure drop and noise.</li>
+<li>Sizing outdoor air for ventilation only and leaving no allowance for exhaust added later.</li>
+<li>Counting door undercut leakage at the design differential but not checking what happens when an airlock door is open.</li>
+</ul>
 <h2>Fan heat and the recirculation loop</h2>
 <p>High recirculation rates bring a large fan heat load. A recirculation unit moving 7,200 cfm at 3 in. w.g. total static with a 65% fan and motor combined efficiency adds roughly 7,200 × 3 ÷ (6,356 × 0.65) = 5.2 hp, about 13,300 Btu/h, all of which ends up in the airstream. Include it in the sensible load and size a dry sensible cooling coil in the recirculation path while the makeup unit handles dehumidification. Whether that recirculation is best done centrally or with ceiling fan filter units is compared in <a href="<?= url('guides/fan-filter-units-vs-central-ahu') ?>">fan filter units vs central AHU recirculation</a>.</p>
 <?php guide_end([

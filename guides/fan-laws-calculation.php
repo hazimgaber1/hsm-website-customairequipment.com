@@ -43,6 +43,10 @@
 <h2>Example 4: density change</h2>
 <p>The same 20,000 cfm fan moves air at 40°F (4°C) instead of standard 70°F (21°C). Density ratio ≈ (460 + 70) ÷ (460 + 40) = 1.06. At the same 1,100 rpm, airflow stays at 20,000 cfm, but pressure rises to 3.0 × 1.06 = 3.18 in. w.c. and power to 15.0 × 1.06 = 15.9 bhp. Cold-start and altitude corrections follow the same ratio; the full density correction method is in <a href="<?= url('guides/fan-density-correction') ?>">fan density correction</a>.</p>
 
+<h2>Using the laws to sanity-check field readings</h2>
+<p>The fan laws are also a quick way to judge whether test and balance numbers make sense. Suppose the submittal says a fan should deliver 20,000 cfm at 1,100 rpm, and the balancer measures 17,500 cfm at 1,100 rpm. If the system matched the design curve, the fan law ratio would require a speed of only 962 rpm to deliver 17,500 cfm. Since the fan is actually running at full design speed, something is pushing the operating point away from design: higher system resistance than calculated, an installation loss at the inlet or outlet, or a fan problem such as reversed rotation or a loose wheel.</p>
+<p>Likewise, if the measured brake horsepower is far from the value the laws predict for the measured speed and airflow, suspect the measurement first. Amperage readings converted to power without a true power factor, or Pitot traverses taken too close to a fitting, are common sources of error. Confirm the measurements, then investigate the system.</p>
+
 <h2>When the fan laws break down</h2>
 <ul>
 <li><strong>Fixed pressure components:</strong> a duct static setpoint, a fixed-pressure terminal or a constant-pressure filter bank means the system curve does not pass through zero, so the operating point is not similar at lower speed.</li>

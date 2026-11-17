@@ -52,6 +52,7 @@
 <li><strong>Rooftop noise</strong> where stores abut residential neighbors; property line limits can control fan selection and unit placement.</li>
 <li><strong>Controls integration</strong> with the store's energy management system and opening hours, including early-morning warm-up before staff arrive.</li>
 </ul>
+<p>Chains often roll out a prototype store design across dozens of sites in very different climates. A unit selection that works in a mild coastal market can be undersized for heating on the prairies or short on dehumidification in the southeast. Re-check coil capacities, economizer high-limit settings and frost protection for each climate zone rather than copying the prototype schedule unchanged.</p>
 <p>Warehouses look similar but have different loads and ventilation drivers; see <a href="<?= url('guides/warehouse-ventilation') ?>">warehouse ventilation</a> for those buildings.</p>
 <?php guide_end([
     ['How do you stop warm air collecting at the roof of a big-box store?', 'Use high-volume low-speed ceiling fans, destratification units, or supply diffusers that throw air vertically in heating mode. Taking return air low in winter also keeps more heat in the occupied zone.'],

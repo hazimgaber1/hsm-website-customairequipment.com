@@ -27,14 +27,14 @@
 <tr><td><strong>Internal static pressure</strong></td><td></td><td><strong>2.85</strong></td></tr>
 <tr><td>Supply ductwork, VAV boxes, diffusers</td><td>Duct design to the critical terminal</td><td>1.50</td></tr>
 <tr><td>Return ductwork, grilles, plenum</td><td>Duct design</td><td>0.40</td></tr>
-<tr><td>Outdoor air louver and intake ductwork</td><td>Louver data and duct design</td><td>0.15</td></tr>
-<tr><td><strong>External static pressure</strong></td><td></td><td><strong>2.05</strong></td></tr>
-<tr><td><strong>Subtotal</strong></td><td></td><td><strong>4.90</strong></td></tr>
+<tr><td>Outdoor air louver and intake ductwork</td><td>Parallel to return path; checked separately, not added</td><td>(0.15)</td></tr>
+<tr><td><strong>External static pressure</strong></td><td></td><td><strong>1.90</strong></td></tr>
+<tr><td><strong>Subtotal</strong></td><td></td><td><strong>4.75</strong></td></tr>
 <tr><td>Allowance (about 5%)</td><td>Stated explicitly</td><td>0.25</td></tr>
-<tr><td><strong>Design total static pressure</strong></td><td></td><td><strong>5.15</strong></td></tr>
+<tr><td><strong>Design total static pressure</strong></td><td></td><td><strong>5.00</strong></td></tr>
 </tbody>
 </table>
-<p class="note">The outdoor air path and the return path are in parallel, not in series. Use whichever path has the higher loss at the operating condition being designed for. Here the return path is larger at minimum outdoor air, and the louver path is checked separately for 100% economizer operation.</p>
+<p class="note">The outdoor air path and the return path are in parallel, not in series. Use whichever path has the higher loss at the operating condition being designed for. Here the return path (0.40) governs at minimum outdoor air, so the louver path (0.15) is shown for reference only and checked separately for 100% economizer operation.</p>
 
 <h2>Choosing the filter value</h2>
 <p>Filters are the largest variable in most budgets. There are three reasonable approaches, and the budget should state which is used:</p>
@@ -59,6 +59,8 @@
 <h2>Keeping the allowance honest</h2>
 <p>Margin is appropriate because duct systems are rarely built exactly as drawn. The problem is stacking it: a designer adds 10% to duct losses, the unit manufacturer rounds up each component, and the fan selector adds another 10%. Compounded, the fan can be 25% oversized in pressure. A single, stated allowance at the bottom of the budget, typically 5% to 10%, is easier to review. The <a href="<?= url('guides/design-margins-without-oversizing') ?>">design margins guide</a> covers this in more depth.</p>
 <p>With the total in hand, fan selection proceeds from airflow and TSP; that step is outside this guide.</p>
+<h2>Presenting the budget on drawings</h2>
+<p>Put the budget table on the equipment schedule sheet or in the basis of design, not only in a calculation file. List the airflow and air density it is based on, the filter loading basis, and the allowance. When a bid substitutes a different coil, filter or recovery device, the reviewer can then replace one line instead of rebuilding the whole number. Update the budget when duct routes change during design development; ESP that was estimated at schematic stage is often the least accurate line.</p>
 <?php guide_end([
     ['What is a typical total static pressure for an air handler?', 'It varies widely. Small comfort units may be around 2 to 3 in. w.c., while large VAV units with high-efficiency filters, energy recovery and long duct runs commonly fall between 4 and 7 in. w.c. Build the budget for each project rather than relying on typical values.'],
     ['Should I use clean or dirty filter pressure drop for fan selection?', 'Use a design loaded value, often mid-life, and confirm the fan can still deliver design airflow with filters at their final pressure drop. Clean values understate the fan duty and should not be used for selection.'],

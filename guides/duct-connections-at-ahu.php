@@ -43,6 +43,8 @@
 </table>
 <p class="note">Leave room for a pitot traverse plane in the main supply duct during design. A straight section downstream of the transition is also the best place for airflow measurement during balancing; see <a href="<?= url('guides/pitot-traverse-airflow-verification') ?>">verifying airflow with a pitot traverse</a>.</p>
 
+<p>Two field habits cause most transition problems. The first is building the transition to suit the duct that was already hung, rather than the unit opening, which leaves a step or offset at the connector. The second is hiding a volume damper or a branch tap inside the transition because it is the only accessible spot. Both create uneven velocity across the fan outlet or the downstream coil, and neither shows up until balancing, when airflow at the first few outlets is mysteriously high or low.</p>
+
 <h2>Step 5: Inspect before insulating</h2>
 <ul>
 <li>Every connector has slack and is aligned with its opening.</li>

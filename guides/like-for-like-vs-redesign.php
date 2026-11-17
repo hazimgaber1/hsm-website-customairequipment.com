@@ -39,6 +39,9 @@
 </ol>
 <p>This approach captures most of the benefit of redesign while preserving the coordination advantages of like-for-like. Margins should be applied once, not stacked, as explained in <a href="<?= url('guides/design-margins-without-oversizing') ?>">how to apply design margins without oversizing</a>.</p>
 
+<h2>Questions to put to the original design</h2>
+<p>Before accepting the old schedule, ask a few pointed questions. Was the unit ever balanced to its design airflow, or has it run well below it for years without complaint? Were zones added or removed in later fit-outs? Does the outdoor air setting reflect the current occupant density? Has the building been re-roofed or re-glazed? Are there recurring work orders for humidity, noise or drafts in specific zones? Each "yes" or "unknown" is a reason to verify rather than copy.</p>
+
 <h2>Choosing between them</h2>
 <ul>
 <li><strong>Choose like-for-like</strong> when the building use has not changed, the old unit performed well, the outage window is short, and verification shows the original duty is still appropriate.</li>

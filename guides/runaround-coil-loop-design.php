@@ -32,7 +32,7 @@
 <p>Required flow = 12,960 ÷ 468 ≈ 27.7 gpm. Round to 28 gpm.</p>
 <p>With outdoor air at −10 F, exhaust at 72 F and a loop effectiveness of 55 percent, the recovered heat is 0.55 × 12,960 × (72 − (−10)) ≈ 584,000 Btu/h, and the supply air leaves the outdoor coil at about −10 + 0.55 × 82 ≈ 35 F.</p>
 <p>The fluid temperature change at 28 gpm is 584,000 ÷ (28 × 468) ≈ 44.6 F, which is a typical order for a balanced loop.</p>
-<p class="note">Glycol properties change with temperature and concentration. Use the manufacturer's data or a published property table at the average loop temperature, not a single fixed value.</p>
+<p class="note">Glycol properties change with temperature and concentration. Use the manufacturer's data or a published property table at the average loop temperature, not a single fixed value. The effect of glycol on coil capacity is covered in <a href="<?= url('guides/glycol-coil-derating') ?>">glycol coil derating</a>.</p>
 
 <h2>Step 4: Size the pump and piping</h2>
 <ol>

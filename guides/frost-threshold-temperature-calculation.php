@@ -50,6 +50,10 @@
 <p>With room air at 72 F and 30 percent RH, the line from that state typically remains clear of saturation until outdoor temperatures well below the sensible plate threshold in example 1. The exact value depends on the latent to sensible effectiveness ratio, which is why wheel manufacturers publish frost threshold curves. Use their curve when available and the line method for a hand check.</p>
 <p class="note">The line method assumes the latent and sensible effectiveness values are similar. If latent effectiveness is much lower than sensible, the wheel behaves more like a sensible device and the threshold rises.</p>
 
+<h2>Using the threshold with weather data</h2>
+<p>The threshold on its own is just a temperature. Its value comes from comparing it with the site's hourly weather. Count the operating hours when outdoor air is below the threshold and note how far below it typically falls. A threshold of 10 F matters little where the coldest week averages 15 F, and a great deal where weeks below 0 F are routine.</p>
+<p>Recalculate at more than one indoor humidity if the setpoint is still under discussion, since that single choice moves the answer more than any equipment option.</p>
+
 <h2>Checklist of inputs to confirm</h2>
 <ul>
 <li>Winter indoor humidity setpoint, not the summer value.</li>

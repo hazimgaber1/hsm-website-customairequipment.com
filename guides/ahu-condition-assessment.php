@@ -13,6 +13,9 @@
 </tbody>
 </table>
 
+<h2>What to bring on the walk-through</h2>
+<p>A flashlight, a mirror on a handle, a moisture meter, an infrared camera, a magnehelic or digital manometer with tubing, a smoke pencil, a vibration pen and a camera cover nearly everything on this list. Bring the original submittal or schedule if one exists, plus the last balance report, so measured static and airflow can be compared with the original intent. Pick a day when the cooling coil is wet or outdoor air is cold; many casing defects, such as cold bridges, sweating panels and carryover, only show under load.</p>
+
 <h2>Casing, base and floor</h2>
 <ul>
 <li>Base frame: section loss, perforation, cracked welds, loose bolts, standing water under the unit.</li>
