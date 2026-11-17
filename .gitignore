@@ -1,0 +1,4 @@
+data/site.sqlite*
+data/settings.json
+.DS_Store
+data/setup-key.txt
