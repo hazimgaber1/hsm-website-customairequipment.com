@@ -1,0 +1,1511 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Custom Air Equipment | An HSM Company</title>
+<meta name="description" content="Custom Air Equipment, an HSM Company: custom air handling units and industrial fans, engineered to order and run-tested before they ship.">
+<link rel="canonical" href="https://customairequipment.com/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=B612+Mono:wght@400;700&display=swap">
+<style>
+/* Layout: an engineering shop-drawing set. Content sits on a 1200px sheet inside one fluid body gutter; sections read like drawing sheets with hairline title blocks. The one loud place is the drawn fan wheel and the live unit sketcher. */
+:root{
+  --paper:#F2F4F5;      /* drafting film ground */
+  --sheet:#FFFFFF;      /* drawing sheet */
+  --ink:#10212F;        /* plotter ink */
+  --ink-2:#3D4F5E;
+  --ink-3:#5A6C7D;
+  --line:rgba(16,33,47,.17);
+  --line-2:rgba(16,33,47,.06);
+  --signal:#F2B705;     /* checker's highlighter, safety yellow */
+  --on-signal:#10212F;
+  --redline:#C23B2E;    /* revision red, errors only */
+  --copper:#B35E2A;     /* heating coils */
+  --chill:#2A6C9F;      /* cooling coils, airflow */
+  --font-display:"Archivo","Helvetica Neue",Helvetica,Arial,sans-serif;
+  --font-body:"Archivo","Helvetica Neue",Helvetica,Arial,sans-serif;
+  --font-mono:"B612 Mono",ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace;
+  --fs-small:.8125rem;
+  --fs-lead:1.1875rem;
+  --fs-h3:1.1875rem;
+  --fs-h2:clamp(1.75rem,1.15rem + 2.2vw,2.625rem);
+  --fs-h1:clamp(2.1rem,1rem + 3.4vw,3.6rem);
+  --max:1200px;
+  --gutter:clamp(16px,4vw,40px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#0B141C; --sheet:#101C27; --ink:#E4EBF0; --ink-2:#AAB8C4; --ink-3:#8797A6;
+    --line:rgba(228,235,240,.17); --line-2:rgba(228,235,240,.06);
+    --signal:#F2B705; --on-signal:#10212F; --redline:#F0776B; --copper:#E08A52; --chill:#65AADC;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0B141C; --sheet:#101C27; --ink:#E4EBF0; --ink-2:#AAB8C4; --ink-3:#8797A6;
+  --line:rgba(228,235,240,.17); --line-2:rgba(228,235,240,.06);
+  --signal:#F2B705; --on-signal:#10212F; --redline:#F0776B; --copper:#E08A52; --chill:#65AADC;
+  color-scheme:dark;
+}
+
+*,*::before,*::after{box-sizing:border-box}
+[hidden]{display:none !important}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{
+  background:var(--paper);color:var(--ink);
+  font-family:var(--font-body);font-size:1rem;line-height:1.6;
+  padding-inline:var(--gutter);overflow-x:clip;
+  -webkit-font-smoothing:antialiased;
+}
+main{max-width:var(--max);margin-inline:auto}
+h1,h2,h3{font-family:var(--font-display);font-stretch:125%;font-weight:800;line-height:1.04;letter-spacing:-.01em;text-wrap:balance;margin:0}
+h1{font-size:var(--fs-h1);line-height:1}
+h2{font-size:var(--fs-h2)}
+h3{font-size:var(--fs-h3);font-stretch:110%;font-weight:700;line-height:1.25;letter-spacing:0}
+p{margin:0;text-wrap:pretty}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+.label{font-family:var(--font-mono);font-size:.75rem;line-height:1.4;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3)}
+.lead{font-size:var(--fs-lead);line-height:1.55;color:var(--ink-2);max-width:34em}
+.note{font-size:var(--fs-small);color:var(--ink-3)}
+.visually-hidden{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+
+/* Buttons */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:10px;
+  font:inherit;font-weight:700;font-size:.9375rem;line-height:1.2;
+  padding:12px 18px;border-radius:2px;border:1.5px solid var(--ink);
+  text-decoration:none;cursor:pointer;
+  transition:transform .15s ease,box-shadow .15s ease;
+}
+.btn:hover{transform:translate(-2px,-2px);box-shadow:3px 3px 0 var(--ink)}
+.btn:active{transform:none;box-shadow:none}
+.btn-primary{background:var(--signal);color:var(--on-signal);border-color:var(--ink)}
+.btn-ghost{background:transparent;color:var(--ink)}
+.btn svg{width:16px;height:16px;flex:none}
+
+/* Header */
+.site-head{
+  position:sticky;top:env(safe-area-inset-top,0px);z-index:30;
+  margin-inline:calc(-1 * var(--gutter));padding-inline:var(--gutter);
+  background:color-mix(in srgb,var(--paper) 90%,transparent);
+  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+  border-bottom:1px solid transparent;transition:border-color .2s ease;
+}
+.site-head.scrolled{border-bottom-color:var(--line)}
+.head-row{max-width:var(--max);margin-inline:auto;display:flex;align-items:center;gap:20px;min-height:64px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink)}
+.brand svg{width:32px;height:32px;flex:none}
+.brand-name{display:block;font-family:var(--font-display);font-stretch:125%;font-weight:800;font-size:1.0625rem;letter-spacing:.07em;line-height:1.1}
+.brand-sub{display:block;font-family:var(--font-mono);font-size:.625rem;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-3);line-height:1.3}
+.logo-tile{fill:var(--on-signal)}
+.logo-wheel{fill:none;stroke:var(--signal);stroke-width:1.9;stroke-linecap:round}
+.logo-hub{fill:var(--signal)}
+.nav{margin-left:auto;display:flex;align-items:center;gap:2px}
+.nav a:not(.btn){color:var(--ink-2);text-decoration:none;font-weight:500;font-size:.9375rem;padding:8px 12px;border-radius:2px}
+.nav a:not(.btn):hover{color:var(--ink);background:var(--line-2)}
+.nav .btn{margin-left:10px;padding:10px 16px}
+.menu-btn{
+  display:none;margin-left:auto;align-items:center;gap:10px;
+  font:inherit;font-weight:600;font-size:.9375rem;color:var(--ink);
+  background:transparent;border:1px solid var(--line);border-radius:2px;padding:8px 12px;cursor:pointer;
+}
+.menu-btn svg{width:18px;height:18px}
+.menu-btn line{stroke:var(--ink);stroke-width:1.8;stroke-linecap:round}
+@media (max-width:900px){
+  .menu-btn{display:inline-flex}
+  .nav{
+    display:none;position:absolute;left:0;right:0;top:100%;
+    flex-direction:column;align-items:stretch;gap:2px;
+    padding-block:8px 18px;padding-inline:var(--gutter);
+    background:var(--paper);border-bottom:1px solid var(--line);
+  }
+  .nav.open{display:flex}
+  .nav a:not(.btn){padding:12px 4px;border-bottom:1px solid var(--line-2)}
+  .nav .btn{margin:12px 0 0}
+}
+
+/* Hero */
+.hero{
+  display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);
+  gap:clamp(28px,4vw,56px);align-items:center;
+  padding-block:clamp(36px,6vw,80px) clamp(40px,5vw,64px);
+}
+.hero-copy{display:grid;gap:24px;min-width:0}
+.hl{background:var(--signal);color:var(--on-signal);padding:0 .1em;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+.hero-actions{display:flex;flex-wrap:wrap;gap:12px}
+.figures{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));margin:6px 0 0;border-top:1px solid var(--ink)}
+.figures div{display:flex;flex-direction:column;justify-content:space-between;padding:14px 12px 0 0;min-width:0}
+.figures dt{font-family:var(--font-mono);font-size:.6875rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);line-height:1.35}
+.figures dd{margin:6px 0 0;font-family:var(--font-display);font-stretch:112%;font-weight:700;font-size:1.25rem;line-height:1.15;font-variant-numeric:tabular-nums}
+.hero-fig{margin:0;min-width:0}
+.sheet{background:var(--sheet);border:1px solid var(--line)}
+.grid-bg{
+  background-image:linear-gradient(var(--line-2) 1px,transparent 1px),linear-gradient(90deg,var(--line-2) 1px,transparent 1px);
+  background-size:24px 24px;background-position:-1px -1px;
+}
+.hero-fig svg{display:block;width:100%;height:auto}
+.titleblock{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(132px,1fr));gap:1px;
+  background:var(--line);border-top:1px solid var(--line);
+  font-family:var(--font-mono);font-size:.75rem;line-height:1.35;color:var(--ink);
+}
+.titleblock > span{padding:8px 12px;background:var(--sheet);min-width:0}
+.titleblock b{display:block;font-weight:400;font-size:.5625rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3)}
+.titleblock > .tb-warn{background:var(--signal);color:var(--on-signal);font-weight:700;letter-spacing:.06em;text-transform:uppercase;display:flex;align-items:center}
+@media (max-width:860px){
+  .hero{grid-template-columns:1fr}
+}
+@media (max-width:560px){
+  .figures{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .figures div:nth-child(n+3){padding-top:16px}
+  .callout{display:none}
+}
+
+/* Drawing strokes, shared by every SVG on the page */
+.ln{fill:none;stroke:var(--ink);stroke-width:1.3}
+.ln-bold{fill:none;stroke:var(--ink);stroke-width:2}
+.ln-thin{fill:none;stroke:var(--ink-3);stroke-width:.8}
+.ln-center{fill:none;stroke:var(--ink-3);stroke-width:.8;stroke-dasharray:22 5 4 5}
+.ln-hidden{fill:none;stroke:var(--ink-3);stroke-width:.9;stroke-dasharray:6 4}
+.ln-dim{fill:none;stroke:var(--ink-2);stroke-width:.8}
+.ah{fill:var(--ink-2)}
+.tx{fill:var(--ink-2);font-family:var(--font-mono);font-size:12px;letter-spacing:.06em}
+.tx-lg{font-size:16px}
+.tx-knock{paint-order:stroke;stroke:var(--sheet);stroke-width:7px;stroke-linejoin:round}
+.blade{fill:color-mix(in srgb,var(--chill) 14%,transparent);stroke:var(--ink);stroke-width:1.3;stroke-linejoin:round}
+.wheel-spin{transform-box:view-box;transform-origin:300px 340px;animation:spin 48s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* Standards strip */
+.standards{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 28px;border-block:1px solid var(--line);padding-block:16px}
+.standards ul{display:flex;flex-wrap:wrap;gap:6px 22px;list-style:none;margin:0;padding:0;font-family:var(--font-mono);font-size:.8125rem;color:var(--ink-2)}
+
+/* Section scaffolding */
+.section{padding-block:clamp(64px,9vw,112px) 0;scroll-margin-top:72px}
+.section-head{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:14px 56px;align-items:end;margin-bottom:clamp(28px,4vw,44px)}
+.section-head .label{grid-column:1 / -1}
+.section-head > p:not(.label){color:var(--ink-2);max-width:34em}
+@media (max-width:820px){.section-head{grid-template-columns:1fr}}
+
+/* Products */
+.products{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));list-style:none;margin:0;padding:0;border:1px solid var(--line);background:var(--sheet)}
+.product{display:grid;grid-template-rows:auto auto 1fr auto auto;gap:14px;padding:clamp(20px,3vw,32px);border-right:1px solid var(--line);border-bottom:1px solid var(--line);min-width:0}
+.product:nth-child(2n){border-right:0}
+.product:nth-last-child(-n+2){border-bottom:0}
+.product-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px}
+.picon{width:60px;height:60px;flex:none}
+.picon .g{fill:none;stroke:var(--ink);stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.picon .g-accent{fill:var(--signal);stroke:var(--ink);stroke-width:1.5}
+.product-code{font-family:var(--font-mono);font-size:.6875rem;letter-spacing:.1em;color:var(--ink-3);border:1px solid var(--line);padding:3px 7px;border-radius:2px}
+.product > p{color:var(--ink-2);max-width:32em}
+.specs{margin:0;border-top:1px solid var(--line)}
+.specs div{display:flex;justify-content:space-between;align-items:baseline;gap:16px;padding-block:9px;border-bottom:1px dashed var(--line)}
+.specs dt{font-family:var(--font-mono);font-size:.6875rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);flex:none}
+.specs dd{margin:0;font-weight:600;text-align:right;font-variant-numeric:tabular-nums;min-width:0}
+.link-arrow{justify-self:start;display:inline-flex;align-items:center;gap:8px;font-weight:700;text-decoration:none;color:var(--ink);border-bottom:2px solid var(--signal);padding-bottom:2px}
+.link-arrow:hover{border-bottom-color:var(--ink)}
+.link-arrow svg{width:14px;height:14px}
+@media (max-width:740px){
+  .products{grid-template-columns:1fr}
+  .product{border-right:0}
+  .product:nth-last-child(-n+2){border-bottom:1px solid var(--line)}
+  .product:last-child{border-bottom:0}
+}
+
+/* Unit sketcher */
+.sketcher{background:var(--sheet);border:1px solid var(--ink)}
+.sk-controls{display:grid;grid-template-columns:auto minmax(0,1fr) minmax(0,1fr);gap:18px 32px;align-items:end;padding:20px clamp(16px,2.5vw,24px);border-bottom:1px solid var(--line)}
+.ctl{display:grid;gap:8px;min-width:0}
+.ctl-row{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.ctl-label{font-family:var(--font-mono);font-size:.6875rem;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3)}
+.ctl-val{font-family:var(--font-mono);font-size:.8125rem;font-variant-numeric:tabular-nums;color:var(--ink);text-align:right}
+.ctl-val small{color:var(--ink-3);font-size:.75rem}
+.presets{display:flex;flex-wrap:wrap;gap:6px}
+.preset{font:inherit;font-size:.875rem;font-weight:600;color:var(--ink-2);background:transparent;border:1px solid var(--line);border-radius:2px;padding:7px 11px;cursor:pointer}
+.preset:hover{border-color:var(--ink);color:var(--ink)}
+.preset[aria-pressed="true"]{background:var(--ink);color:var(--sheet);border-color:var(--ink)}
+input[type="range"]{width:100%;margin:6px 0;accent-color:var(--ink);cursor:pointer}
+.sk-drawing{overflow-x:auto;position:relative}
+.sk-drawing svg{display:block;width:100%}
+.sk-body{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);border-top:1px solid var(--line)}
+.sk-sections,.sk-results{padding:20px clamp(16px,2.5vw,24px) 24px;min-width:0}
+.sk-sections{border-right:1px solid var(--line);display:grid;gap:12px;align-content:start}
+.sk-results{display:grid;gap:16px;align-content:start}
+.sk-h{font-size:1rem;font-stretch:112%}
+.sk-hrow{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}
+.sec-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;list-style:none;margin:0;padding:0}
+.sec-btn{
+  width:100%;display:grid;grid-template-columns:26px minmax(0,1fr);gap:10px;align-items:center;text-align:left;
+  font:inherit;font-size:.875rem;line-height:1.3;color:var(--ink-2);
+  background:transparent;border:1px solid var(--line);border-radius:2px;padding:8px 10px;cursor:pointer;
+}
+.sec-btn:hover{border-color:var(--ink-3);color:var(--ink)}
+.sec-tag{width:24px;height:24px;display:grid;place-items:center;border:1px dashed var(--ink-3);border-radius:50%;font-family:var(--font-mono);font-size:.75rem;color:var(--ink-3)}
+.sec-name{display:block;font-weight:600;min-width:0}
+.sec-meta{display:block;font-family:var(--font-mono);font-size:.6875rem;color:var(--ink-3);font-variant-numeric:tabular-nums}
+.sec-btn[aria-pressed="true"]{color:var(--ink);border-color:var(--ink);background:var(--paper)}
+.sec-btn[aria-pressed="true"] .sec-tag{background:var(--ink);border:1px solid var(--ink);color:var(--sheet)}
+.end-wrap{border:1px solid var(--line);background:var(--paper)}
+.end-wrap svg{display:block;width:100%}
+.readout{margin:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:20px;border-top:1px solid var(--line)}
+.readout div{display:grid;gap:3px;align-content:start;padding-block:10px 11px;border-bottom:1px dashed var(--line);min-width:0}
+.readout dt{font-family:var(--font-mono);font-size:.625rem;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3)}
+.readout dd{margin:0;font-family:var(--font-mono);font-size:.9375rem;font-variant-numeric:tabular-nums;color:var(--ink)}
+.readout dd small{display:block;font-size:.6875rem;color:var(--ink-3)}
+.readout .warn dd{color:var(--redline)}
+.sk-actions{display:grid;gap:8px}
+.sk-actions .btn{width:100%}
+.sk-status{font-size:var(--fs-small);font-weight:600;color:var(--ink);min-height:1.3em}
+
+/* Sketcher drawing */
+.u-case{fill:none;stroke:var(--ink);stroke-width:1.6}
+.u-rail{fill:color-mix(in srgb,var(--ink) 16%,transparent);stroke:var(--ink);stroke-width:1}
+.u-part{stroke:var(--ink-3);stroke-width:.8;stroke-dasharray:3 3}
+.u-knock{stroke:var(--sheet);stroke-width:3}
+.g{fill:none;stroke:var(--ink);stroke-width:1.1;stroke-linecap:round;stroke-linejoin:round}
+.g-thin{stroke-width:.6}
+.g-fill{fill:var(--sheet)}
+.g-heat{stroke:var(--copper)}
+.g-cool{stroke:var(--chill)}
+.g-pod{fill:color-mix(in srgb,var(--ink) 9%,transparent)}
+.g-lamp{fill:color-mix(in srgb,var(--signal) 55%,transparent)}
+.sec-hit{fill:transparent}
+.sec:hover .sec-hit{fill:color-mix(in srgb,var(--signal) 20%,transparent)}
+.flow{fill:none;stroke:var(--chill);stroke-width:1.1;stroke-dasharray:3 14;opacity:.55;animation:flow 1.4s linear infinite}
+@keyframes flow{to{stroke-dashoffset:-34}}
+.fan-rot{transform-box:view-box;animation:spin 2.6s linear infinite}
+.air{fill:none;stroke:var(--chill);stroke-width:2}
+.air-head{fill:var(--chill)}
+.num-c{fill:var(--sheet);stroke:var(--ink);stroke-width:1}
+.num-t{fill:var(--ink);font-family:var(--font-mono);font-size:10px;text-anchor:middle}
+.tx-air{fill:var(--chill);font-family:var(--font-mono);font-size:11px;font-weight:700;letter-spacing:.08em}
+.tx-empty{fill:var(--ink-3);font-family:var(--font-body);font-size:15px}
+.dim-bg{fill:var(--sheet)}
+.person{fill:color-mix(in srgb,var(--ink) 38%,transparent)}
+.ground{stroke:var(--ink-2);stroke-width:1}
+.ground-hatch{stroke:var(--ink-3);stroke-width:.6}
+@media (max-width:1100px){
+  .sk-controls{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+  .sk-controls .ctl:first-child{grid-column:1 / -1}
+}
+@media (max-width:860px){
+  .sk-body{grid-template-columns:1fr}
+  .sk-sections{border-right:0;border-bottom:1px solid var(--line)}
+}
+@media (max-width:560px){
+  .sk-controls{grid-template-columns:1fr}
+  .sec-list{grid-template-columns:1fr}
+}
+
+/* Why custom */
+.why{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0 clamp(24px,3vw,44px);list-style:none;margin:0;padding:0}
+.why li{border-top:1.5px solid var(--ink);padding-block:18px 36px;display:grid;gap:10px;align-content:start;min-width:0}
+.why h3{font-size:1.1875rem}
+.why p{color:var(--ink-2)}
+.why .fix{font-family:var(--font-mono);font-size:.6875rem;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3)}
+@media (max-width:900px){.why{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:600px){.why{grid-template-columns:1fr}}
+
+/* Application schedule */
+.sched-wrap{overflow-x:auto;background:var(--sheet);border:1px solid var(--line)}
+.sched{width:100%;border-collapse:collapse;font-size:.9375rem;line-height:1.5}
+.sched th,.sched td{text-align:left;vertical-align:top;padding:14px 18px;border-bottom:1px solid var(--line)}
+.sched thead th{font-family:var(--font-mono);font-size:.6875rem;font-weight:400;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3);background:var(--paper);border-bottom:1.5px solid var(--ink)}
+.sched tbody th{font-family:var(--font-display);font-stretch:112%;font-weight:700;white-space:nowrap;color:var(--ink)}
+.sched td{color:var(--ink-2)}
+.sched .tag{font-family:var(--font-mono);font-size:.75rem;color:var(--ink-3);white-space:nowrap;width:1%}
+.sched tbody tr:last-child > *{border-bottom:0}
+.sched tbody tr:hover > *{background:var(--line-2)}
+@media (max-width:680px){
+  .sched thead{display:none}
+  .sched,.sched tbody,.sched tr,.sched th,.sched td{display:block;width:auto}
+  .sched tr{padding:16px 18px;border-bottom:1px solid var(--line)}
+  .sched tbody tr:last-child{border-bottom:0}
+  .sched th,.sched td{padding:0;border:0}
+  .sched .tag{width:auto}
+  .sched td[data-label]::before{content:attr(data-label);display:block;margin-top:10px;font-family:var(--font-mono);font-size:.625rem;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3)}
+}
+
+/* Process */
+.steps{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));list-style:none;margin:0;padding:0}
+.steps li{display:grid;gap:10px;align-content:start;padding-right:22px;min-width:0}
+.step-n{order:-2}
+.step-t{order:-1}
+.step-n{display:flex;align-items:center;gap:10px;font-family:var(--font-mono);font-size:.8125rem;color:var(--ink)}
+.step-n::before{content:"";width:11px;height:11px;border-radius:50%;background:var(--signal);border:1.5px solid var(--ink);flex:none}
+.step-n::after{content:"";flex:1;height:1.5px;background:var(--ink)}
+.steps li:last-child .step-n::after{background:linear-gradient(90deg,var(--ink),transparent)}
+.step-t{justify-self:start;font-family:var(--font-mono);font-size:.6875rem;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-2);background:var(--line-2);border:1px solid var(--line);padding:2px 7px;border-radius:2px}
+.steps p{color:var(--ink-2);font-size:.9375rem}
+@media (max-width:960px){
+  .steps{grid-template-columns:1fr;gap:0}
+  .steps li{grid-template-columns:auto minmax(0,1fr);column-gap:16px;padding:0 0 26px;position:relative}
+  .steps li > *{grid-column:2}
+  .step-n{grid-column:1 / -1}
+  .step-n::after{display:none}
+  .steps li::before{content:"";position:absolute;left:5px;top:22px;bottom:0;width:1.5px;background:var(--ink)}
+  .steps li:last-child::before{display:none}
+  .steps li > :not(.step-n){margin-left:24px}
+}
+.plant{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px;margin:clamp(44px,6vw,72px) 0 0;padding-top:24px;border-top:1px solid var(--line)}
+.plant div{display:flex;flex-direction:column-reverse;justify-content:flex-end;gap:8px;min-width:0}
+.plant dd{margin:0;font-family:var(--font-display);font-stretch:125%;font-weight:800;font-size:clamp(1.75rem,1.2rem + 2vw,2.625rem);line-height:1;font-variant-numeric:tabular-nums}
+.plant dt{color:var(--ink-2);font-size:.9375rem;max-width:18em}
+@media (max-width:800px){.plant{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* Contact */
+.contact-grid{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:clamp(28px,5vw,64px);align-items:start}
+.contact-info{display:grid;gap:18px;min-width:0}
+.contact-info > p:not(.label){color:var(--ink-2);max-width:32em}
+.contacts{margin:6px 0 0;border-top:1px solid var(--ink)}
+.contacts div{display:grid;gap:4px;padding-block:12px;border-bottom:1px solid var(--line)}
+.contacts dt{font-family:var(--font-mono);font-size:.6875rem;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3)}
+.contacts dd{margin:0;display:flex;align-items:center;flex-wrap:wrap;gap:6px 12px;font-weight:600}
+.phone{text-decoration:none;color:inherit;font-family:var(--font-display);font-stretch:112%;font-size:1.25rem;font-weight:700;font-variant-numeric:tabular-nums;-webkit-user-select:all;user-select:all}
+.copy{font-family:var(--font-mono);font-size:.6875rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-2);background:transparent;border:1px solid var(--line);border-radius:2px;padding:4px 8px;cursor:pointer}
+.copy:hover{border-color:var(--ink);color:var(--ink)}
+.form-sheet{padding:clamp(20px,3vw,32px);min-width:0}
+.f-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px 18px}
+.field{display:grid;gap:6px;align-content:start;min-width:0}
+.field.full{grid-column:1 / -1}
+.field label{font-size:.8125rem;font-weight:600;color:var(--ink-2)}
+.req{color:var(--ink-3);font-weight:400}
+input:not([type="range"]),select,textarea{
+  width:100%;min-width:0;font:inherit;font-size:1rem;color:var(--ink);
+  background:var(--paper);border:1px solid var(--line);border-radius:2px;padding:11px 12px;
+}
+input:not([type="range"]):hover,select:hover,textarea:hover{border-color:var(--ink-3)}
+input:not([type="range"]):focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--ink);outline-offset:0;border-color:var(--ink)}
+textarea{resize:vertical;min-height:132px;line-height:1.5}
+::placeholder{color:var(--ink-3);opacity:1}
+[aria-invalid="true"]{border-color:var(--redline) !important}
+.err{font-size:.8125rem;color:var(--redline)}
+.err:empty{display:none}
+.f-foot{display:flex;flex-wrap:wrap;align-items:center;gap:12px 18px;margin-top:22px}
+.sent{display:grid;gap:14px}
+.sent:focus{outline:none}
+.sent pre{margin:0;white-space:pre-wrap;word-break:break-word;font-family:var(--font-mono);font-size:.8125rem;line-height:1.55;color:var(--ink);background:var(--paper);border:1px dashed var(--line);padding:14px;max-height:340px;overflow:auto}
+.sent-actions{display:flex;flex-wrap:wrap;gap:10px}
+@media (max-width:860px){.contact-grid{grid-template-columns:1fr}}
+@media (max-width:520px){.f-grid{grid-template-columns:1fr}}
+
+/* Footer */
+.site-foot{margin-top:clamp(72px,10vw,128px);margin-inline:calc(-1 * var(--gutter));padding-inline:var(--gutter);padding-block:40px 32px;background:var(--sheet);border-top:1px solid var(--line)}
+.foot-row{max-width:var(--max);margin-inline:auto;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:24px 48px;align-items:start}
+.foot-brand{display:grid;gap:12px}
+.foot-brand p{color:var(--ink-2);max-width:26em}
+.foot-nav{display:flex;flex-wrap:wrap;gap:8px 22px}
+.foot-nav a{color:var(--ink-2);text-decoration:none;font-weight:500}
+.foot-nav a:hover{color:var(--ink);text-decoration:underline;text-underline-offset:3px}
+.foot-fine{grid-column:1 / -1;font-size:.8125rem;color:var(--ink-3);border-top:1px solid var(--line);padding-top:16px}
+@media (max-width:700px){.foot-row{grid-template-columns:1fr}}
+
+@media (prefers-reduced-motion: reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation:none !important;transition:none !important}
+}
+</style>
+
+</head>
+<body>
+<header class="site-head" id="top">
+  <div class="head-row">
+    <a class="brand" href="#top" aria-label="Custom Air Equipment, an HSM Company, back to top">
+      <svg viewBox="0 0 32 32" aria-hidden="true">
+        <rect class="logo-tile" x="0" y="0" width="32" height="32" rx="2"/>
+        <circle class="logo-wheel" cx="16" cy="16" r="10.2"/>
+        <g>
+          <line class="logo-wheel" x1="19.4" y1="16" x2="23.2" y2="11.3"/>
+          <line class="logo-wheel" x1="19.4" y1="16" x2="23.2" y2="11.3" transform="rotate(60 16 16)"/>
+          <line class="logo-wheel" x1="19.4" y1="16" x2="23.2" y2="11.3" transform="rotate(120 16 16)"/>
+          <line class="logo-wheel" x1="19.4" y1="16" x2="23.2" y2="11.3" transform="rotate(180 16 16)"/>
+          <line class="logo-wheel" x1="19.4" y1="16" x2="23.2" y2="11.3" transform="rotate(240 16 16)"/>
+          <line class="logo-wheel" x1="19.4" y1="16" x2="23.2" y2="11.3" transform="rotate(300 16 16)"/>
+        </g>
+        <circle class="logo-hub" cx="16" cy="16" r="2.4"/>
+      </svg>
+      <span><span class="brand-name">CUSTOM AIR EQUIPMENT</span><span class="brand-sub">An HSM Company</span></span>
+    </a>
+    <button class="menu-btn" type="button" id="menu-btn" aria-expanded="false" aria-controls="nav">
+      <svg viewBox="0 0 18 18" aria-hidden="true"><line x1="2" y1="6" x2="16" y2="6"/><line x1="2" y1="12" x2="16" y2="12"/></svg>
+      Menu
+    </button>
+    <nav class="nav" id="nav" aria-label="Main">
+      <a href="#products">Products</a>
+      <a href="#sketch">Unit sketcher</a>
+      <a href="#why">Why custom</a>
+      <a href="#applications">Applications</a>
+      <a href="#process">Process</a>
+      <a class="btn btn-primary" href="#quote">Request a quote</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="hero" aria-labelledby="hero-h">
+    <div class="hero-copy">
+      <p class="label">Custom air handling units · Industrial fans</p>
+      <h1 id="hero-h">Air handlers and fans, built to <span class="hl">your drawing.</span></h1>
+      <p class="lead">We engineer and build custom AHUs from 2,000 to 150,000 CFM, and the fans that go inside them, for projects where a catalog unit won't fit, won't perform, or won't last.</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="#quote">Start a project</a>
+        <a class="btn btn-ghost" href="#sketch">Sketch a unit</a>
+      </div>
+      <dl class="figures">
+        <div><dt>Airflow per unit</dt><dd>2k–150k CFM</dd></div>
+        <div><dt>Fan pressure</dt><dd>to 30 in. w.g.</dd></div>
+        <div><dt>Units run-tested</dt><dd>100%</dd></div>
+        <div><dt>Building custom since</dt><dd>1988</dd></div>
+      </dl>
+    </div>
+
+    <figure class="hero-fig sheet">
+      <div class="grid-bg">
+        <svg viewBox="0 0 600 606" role="img" aria-labelledby="wheel-title">
+          <title id="wheel-title">Technical drawing of a 48-inch plenum fan wheel with twelve backward-inclined airfoil blades</title>
+          <defs>
+            <marker id="dim-arrow" viewBox="0 0 10 10" refX="9.5" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse">
+              <path class="ah" d="M0 1.5 L10 5 L0 8.5 Z"/>
+            </marker>
+            <path id="blade" class="blade" d="M422 340 C462 330 482 252 473 195 C468 248 452 318 422 340 Z"/>
+          </defs>
+
+          <line class="ln-center" x1="36" y1="340" x2="564" y2="340"/>
+          <line class="ln-center" x1="300" y1="92" x2="300" y2="598"/>
+
+          <line class="ln-dim" x1="68" y1="328" x2="68" y2="56"/>
+          <line class="ln-dim" x1="532" y1="328" x2="532" y2="56"/>
+          <line class="ln-dim" x1="69" y1="66" x2="531" y2="66" marker-start="url(#dim-arrow)" marker-end="url(#dim-arrow)"/>
+          <text class="tx tx-lg" x="300" y="56" text-anchor="middle">Ø 48″ WHEEL</text>
+
+          <circle class="ln-bold" cx="300" cy="340" r="232"/>
+          <circle class="ln-thin" cx="300" cy="340" r="225"/>
+          <circle class="ln-hidden" cx="300" cy="340" r="118"/>
+
+          <g class="wheel-spin">
+            <use href="#blade"/>
+            <use href="#blade" transform="rotate(30 300 340)"/>
+            <use href="#blade" transform="rotate(60 300 340)"/>
+            <use href="#blade" transform="rotate(90 300 340)"/>
+            <use href="#blade" transform="rotate(120 300 340)"/>
+            <use href="#blade" transform="rotate(150 300 340)"/>
+            <use href="#blade" transform="rotate(180 300 340)"/>
+            <use href="#blade" transform="rotate(210 300 340)"/>
+            <use href="#blade" transform="rotate(240 300 340)"/>
+            <use href="#blade" transform="rotate(270 300 340)"/>
+            <use href="#blade" transform="rotate(300 300 340)"/>
+            <use href="#blade" transform="rotate(330 300 340)"/>
+            <circle class="ln" cx="331" cy="340" r="3.5"/>
+            <circle class="ln" cx="315.5" cy="366.8" r="3.5"/>
+            <circle class="ln" cx="284.5" cy="366.8" r="3.5"/>
+            <circle class="ln" cx="269" cy="340" r="3.5"/>
+            <circle class="ln" cx="284.5" cy="313.2" r="3.5"/>
+            <circle class="ln" cx="315.5" cy="313.2" r="3.5"/>
+            <rect class="ln" x="296" y="321" width="8" height="5"/>
+          </g>
+          <circle class="ln" cx="300" cy="340" r="46"/>
+          <circle class="ln-bold" cx="300" cy="340" r="16"/>
+
+          <g class="callout">
+            <polyline class="ln-dim" points="110,473 78,548 8,548"/>
+            <circle class="ah" cx="110" cy="473" r="2.5"/>
+            <text class="tx" x="8" y="568">12 AIRFOIL BLADES</text>
+            <text class="tx" x="8" y="585">BACKWARD-INCLINED</text>
+          </g>
+          <g class="callout">
+            <polyline class="ln-dim" points="333,373 470,552 596,552"/>
+            <circle class="ah" cx="333" cy="373" r="2.5"/>
+            <text class="tx" x="596" y="572" text-anchor="end">TAPER-LOCK HUB</text>
+            <text class="tx" x="596" y="589" text-anchor="end">BALANCED TO G2.5</text>
+          </g>
+        </svg>
+      </div>
+      <figcaption class="titleblock">
+        <span><b>Part</b>Plenum fan wheel</span>
+        <span><b>Blades</b>12 × airfoil, BI</span>
+        <span><b>View</b>Inlet side, shroud omitted</span>
+        <span><b>Dwg</b>CAE-1142 rev C</span>
+      </figcaption>
+    </figure>
+  </section>
+
+  <section class="standards" aria-label="Standards we design and test to">
+    <p class="label">Designed and tested to</p>
+    <ul>
+      <li>AHRI 430</li>
+      <li>AHRI 1350</li>
+      <li>ANSI/AMCA 210</li>
+      <li>AMCA 300</li>
+      <li>UL 1995 / CSA C22.2 No. 236</li>
+      <li>ASHRAE 90.1</li>
+    </ul>
+  </section>
+
+  <section class="section" id="products" aria-labelledby="products-h">
+    <div class="section-head">
+      <p class="label">Products</p>
+      <h2 id="products-h">Four product lines, every one built to order.</h2>
+      <p>Nothing ships from a warehouse. Each unit starts as a selection for one project and a set of drawings you approve before we cut any steel.</p>
+    </div>
+    <ul class="products">
+      <li class="product">
+        <div class="product-top">
+          <svg class="picon" viewBox="0 0 60 60" aria-hidden="true">
+            <rect class="g" x="4" y="15" width="52" height="29"/>
+            <path class="g" d="M4 48h52M9 44v4M51 44v4"/>
+            <path class="g" d="M16 15v29M30 15v29" stroke-dasharray="2 2.5"/>
+            <path class="g" d="M11 19l-3.5 3.5 3.5 3.5-3.5 3.5 3.5 3.5-3.5 3.5 3.5 3.5"/>
+            <rect class="g" x="20" y="19" width="6" height="21"/>
+            <path class="g" d="M20 40L26 19"/>
+            <circle class="g-accent" cx="43" cy="29.5" r="8.5"/>
+            <path class="g" d="M43 29.5l4.8-3.4M43 29.5l-.6 5.9M43 29.5l-4.2-2.6"/>
+          </svg>
+          <span class="product-code">Series AH</span>
+        </div>
+        <h3>Custom air handling units</h3>
+        <p>Indoor and outdoor units in any arrangement: stacked, split for rigging, or built around a footprint you already have, with any mix of coils, filters, fans, and energy recovery.</p>
+        <dl class="specs">
+          <div><dt>Airflow</dt><dd>2,000–150,000 CFM</dd></div>
+          <div><dt>Casing</dt><dd>2″ or 4″ double-wall, thermally broken</dd></div>
+          <div><dt>Leakage</dt><dd>≤ 1% of design airflow</dd></div>
+        </dl>
+        <a class="link-arrow" href="#quote" data-project="Custom air handler">Quote a custom AHU <svg viewBox="0 0 14 14" aria-hidden="true"><path class="g" d="M2 7h10M8 3l4 4-4 4" style="fill:none;stroke:currentColor;stroke-width:1.6"/></svg></a>
+      </li>
+      <li class="product">
+        <div class="product-top">
+          <svg class="picon" viewBox="0 0 60 60" aria-hidden="true">
+            <rect class="g" x="5" y="9" width="50" height="42"/>
+            <circle class="g" cx="17" cy="21" r="6.5"/><circle class="g" cx="30" cy="21" r="6.5"/><circle class="g-accent" cx="43" cy="21" r="6.5"/>
+            <circle class="g" cx="17" cy="39" r="6.5"/><circle class="g" cx="30" cy="39" r="6.5"/><circle class="g" cx="43" cy="39" r="6.5"/>
+            <path class="g" d="M17 21h.01M30 21h.01M43 21h.01M17 39h.01M30 39h.01M43 39h.01" style="stroke-width:3"/>
+          </svg>
+          <span class="product-code">Series FA</span>
+        </div>
+        <h3>Fan arrays</h3>
+        <p>Several direct-drive plenum fans working as one. Lose a fan and the rest pick up the load. Shorter and quieter than a single large fan in the same unit.</p>
+        <dl class="specs">
+          <div><dt>Fans per array</dt><dd>2–36</dd></div>
+          <div><dt>Motors</dt><dd>EC or PM, direct drive</dd></div>
+          <div><dt>Redundancy</dt><dd>N+1 standard</dd></div>
+        </dl>
+        <a class="link-arrow" href="#quote" data-project="Fan array">Quote a fan array <svg viewBox="0 0 14 14" aria-hidden="true"><path d="M2 7h10M8 3l4 4-4 4" style="fill:none;stroke:currentColor;stroke-width:1.6"/></svg></a>
+      </li>
+      <li class="product">
+        <div class="product-top">
+          <svg class="picon" viewBox="0 0 60 60" aria-hidden="true">
+            <path class="g" d="M28 11 A19 19 0 1 0 47 30 L47 11 Z"/>
+            <path class="g" d="M47 11h8v10h-8"/>
+            <circle class="g-accent" cx="28" cy="30" r="9.5"/>
+            <circle class="g" cx="28" cy="30" r="2.6"/>
+            <path class="g" d="M14 55h28M19 49v6M37 49v6"/>
+          </svg>
+          <span class="product-code">Series IF</span>
+        </div>
+        <h3>Industrial fans</h3>
+        <p>Centrifugal, mixed-flow, and vaneaxial fans for process air, fume exhaust, and material handling, in alloys and coatings matched to what you're moving.</p>
+        <dl class="specs">
+          <div><dt>Airflow</dt><dd>to 250,000 CFM</dd></div>
+          <div><dt>Pressure</dt><dd>to 30 in. w.g.</dd></div>
+          <div><dt>Air temperature</dt><dd>to 800 °F</dd></div>
+        </dl>
+        <a class="link-arrow" href="#quote" data-project="Industrial fan">Quote an industrial fan <svg viewBox="0 0 14 14" aria-hidden="true"><path d="M2 7h10M8 3l4 4-4 4" style="fill:none;stroke:currentColor;stroke-width:1.6"/></svg></a>
+      </li>
+      <li class="product">
+        <div class="product-top">
+          <svg class="picon" viewBox="0 0 60 60" aria-hidden="true">
+            <rect class="g" x="4" y="26" width="15" height="26"/>
+            <rect class="g-accent" x="22.5" y="17" width="15" height="26"/>
+            <rect class="g" x="41" y="8" width="15" height="26"/>
+            <path class="g" d="M7.5 29.5h.01M15.5 29.5h.01M7.5 48.5h.01M15.5 48.5h.01M44.5 11.5h.01M52.5 11.5h.01M44.5 30.5h.01M52.5 30.5h.01" style="stroke-width:2.6"/>
+            <path class="g" d="M19 39l3.5-3M37.5 30l3.5-3" stroke-dasharray="2 2"/>
+          </svg>
+          <span class="product-code">Series KD</span>
+        </div>
+        <h3>Retrofit and knockdown units</h3>
+        <p>Replacements engineered to your existing curb and connections, or shipped as panels and rebuilt in place when the only way in is a freight elevator.</p>
+        <dl class="specs">
+          <div><dt>Access</dt><dd>Through a 36″ door</dd></div>
+          <div><dt>Footprint</dt><dd>Matched to the old unit</dd></div>
+          <div><dt>Assembly</dt><dd>Rebuilt and leak-tested on site</dd></div>
+        </dl>
+        <a class="link-arrow" href="#quote" data-project="Retrofit or replacement">Quote a retrofit <svg viewBox="0 0 14 14" aria-hidden="true"><path d="M2 7h10M8 3l4 4-4 4" style="fill:none;stroke:currentColor;stroke-width:1.6"/></svg></a>
+      </li>
+    </ul>
+  </section>
+
+  <section class="section" id="sketch" aria-labelledby="sketch-h">
+    <div class="section-head">
+      <p class="label">Unit sketcher</p>
+      <h2 id="sketch-h">Rough out your air handler in a minute.</h2>
+      <p>Pick the sections your airstream needs and set the airflow. The sketch redraws with preliminary dimensions, static pressure, and fan power, and you can send it with a quote request as a starting point.</p>
+    </div>
+
+    <div class="sketcher">
+      <div class="sk-controls">
+        <div class="ctl">
+          <span class="ctl-label" id="preset-label">Start from a typical unit</span>
+          <div class="presets" role="group" aria-labelledby="preset-label">
+            <button type="button" class="preset" data-preset="office" aria-pressed="false">Office VAV</button>
+            <button type="button" class="preset" data-preset="hospital" aria-pressed="true">Hospital, 100% OA</button>
+            <button type="button" class="preset" data-preset="lab" aria-pressed="false">Lab makeup air</button>
+            <button type="button" class="preset" data-preset="data" aria-pressed="false">Data hall</button>
+          </div>
+        </div>
+        <div class="ctl">
+          <div class="ctl-row"><label class="ctl-label" for="cfm">Airflow</label><output class="ctl-val" id="cfm-out" for="cfm"></output></div>
+          <input type="range" id="cfm" min="2000" max="120000" step="1000" value="30000">
+        </div>
+        <div class="ctl">
+          <div class="ctl-row"><label class="ctl-label" for="esp">External static</label><output class="ctl-val" id="esp-out" for="esp"></output></div>
+          <input type="range" id="esp" min="0.25" max="4" step="0.25" value="2">
+        </div>
+      </div>
+
+      <div class="sk-drawing grid-bg" id="elev-wrap">
+        <svg id="elev" role="img" aria-label="Preliminary side elevation of the air handler"></svg>
+      </div>
+      <div class="titleblock">
+        <span><b>Title</b>Preliminary AHU elevation</span>
+        <span><b>Dwg</b><span id="tb-dwg">SK-030-11</span></span>
+        <span><b>Scale</b>NTS</span>
+        <span><b>Date</b><span id="tb-date">2026-09-28</span></span>
+        <span class="tb-warn">Not for construction</span>
+      </div>
+
+      <div class="sk-body">
+        <div class="sk-sections">
+          <div class="sk-hrow">
+            <h3 class="sk-h">Sections in the airstream</h3>
+            <span class="note" id="sec-count"></span>
+          </div>
+          <p class="note">Tap a section to add or remove it. Sections fall into their usual order, upstream to downstream.</p>
+          <ul class="sec-list" id="sec-list"></ul>
+        </div>
+        <div class="sk-results">
+          <h3 class="sk-h">Preliminary sizing</h3>
+          <div class="end-wrap" id="end-wrap">
+            <svg id="endview" role="img" aria-label="End view of the unit next to a person for scale"></svg>
+          </div>
+          <dl class="readout">
+            <div><dt>Airflow</dt><dd id="r-cfm"></dd></div>
+            <div><dt>Overall length</dt><dd id="r-len"></dd></div>
+            <div><dt>Casing W × H</dt><dd id="r-wh"></dd></div>
+            <div id="r-fans-row"><dt>Fan array</dt><dd id="r-fans"></dd></div>
+            <div><dt>Total static</dt><dd id="r-tsp"></dd></div>
+            <div id="r-bhp-row"><dt>Fan shaft power</dt><dd id="r-bhp"></dd></div>
+          </dl>
+          <div class="sk-actions">
+            <button type="button" class="btn btn-primary" id="send-sketch">Send this sketch with a quote request</button>
+            <p class="sk-status" id="sketch-status" role="status"></p>
+          </div>
+          <p class="note">Rough estimate at 500 fpm coil face velocity, typical section lengths, and 65% fan efficiency. An application engineer sizes the real unit.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="why" aria-labelledby="why-h">
+    <div class="section-head">
+      <p class="label">Why custom</p>
+      <h2 id="why-h">The jobs we get called for.</h2>
+      <p>Most of our projects start after a catalog selection has already failed. These are the constraints we hear most often, and how we build around them.</p>
+    </div>
+    <ul class="why">
+      <li>
+        <h3>The only way in is a 36-inch door.</h3>
+        <p class="fix">Knockdown construction</p>
+        <p>Units ship as panels, coils, and fan modules sized for your doorway or freight elevator. Our crew rebuilds them in place and leak-tests the casing before startup.</p>
+      </li>
+      <li>
+        <h3>The new unit has to land on the old curb.</h3>
+        <p class="fix">Footprint matching</p>
+        <p>We survey the existing unit and match its footprint, duct connections, and service clearances, so the replacement bolts up without new steel or roof work.</p>
+      </li>
+      <li>
+        <h3>The room next door has to stay at NC 25.</h3>
+        <p class="fix">Acoustic design</p>
+        <p>Fan arrays, sound attenuators, and perforated liners, selected against a noise criteria target with sound data measured in our own lab.</p>
+      </li>
+      <li>
+        <h3>It's −40° outside, or 120° inside the plant.</h3>
+        <p class="fix">Extreme ambients</p>
+        <p>Thermally broken casings, preheat and freeze protection, and motors and bearings rated for the conditions the unit will actually see.</p>
+      </li>
+      <li>
+        <h3>The airstream is wet, corrosive, or full of dust.</h3>
+        <p class="fix">Materials and wheel design</p>
+        <p>Stainless and coated construction, radial wheels for material handling, and spark-resistant builds to AMCA 99-0401 Type A, B, or C.</p>
+      </li>
+      <li>
+        <h3>The air can't stop, even for maintenance.</h3>
+        <p class="fix">Redundancy</p>
+        <p>N+1 fan arrays with isolation dampers let your team pull a fan while the unit keeps running. Dual coils and redundant controls where the space demands it.</p>
+      </li>
+    </ul>
+  </section>
+
+  <section class="section" id="applications" aria-labelledby="apps-h">
+    <div class="section-head">
+      <p class="label">Applications</p>
+      <h2 id="apps-h">Where the requirements are strict.</h2>
+      <p>The buildings we build for most, laid out the way a mechanical schedule would list them: what each space asks of the air handler, and what we usually put in the box.</p>
+    </div>
+    <div class="sched-wrap">
+      <table class="sched">
+        <thead>
+          <tr><th scope="col">Tag</th><th scope="col">Application</th><th scope="col">Typical requirements</th><th scope="col">What we usually build</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="tag">A-1</td><th scope="row">Healthcare</th><td data-label="Typical requirements">100% outdoor air, MERV 14 final filters, ASHRAE 170 pressure relationships</td><td data-label="What we usually build">Energy recovery, steam humidification, N+1 fan arrays</td></tr>
+          <tr><td class="tag">A-2</td><th scope="row">Laboratories</th><td data-label="Typical requirements">Once-through air, fume exhaust, tight room pressure control</td><td data-label="What we usually build">Makeup air units, high-plume exhaust fans, coated coils</td></tr>
+          <tr><td class="tag">A-3</td><th scope="row">Data centers</th><td data-label="Typical requirements">High sensible load, continuous duty, no single point of failure</td><td data-label="What we usually build">EC fan arrays, large-face chilled water coils, redundant controls</td></tr>
+          <tr><td class="tag">A-4</td><th scope="row">Cleanrooms</th><td data-label="Typical requirements">HEPA filtration, tight humidity control, high air change rates</td><td data-label="What we usually build">Recirculating units, sealed casings, low-particle interiors</td></tr>
+          <tr><td class="tag">A-5</td><th scope="row">Pharmaceutical</th><td data-label="Typical requirements">GMP documentation, cleanable interiors, validation support</td><td data-label="What we usually build">Stainless interiors, full turnover packages, witnessed factory tests</td></tr>
+          <tr><td class="tag">A-6</td><th scope="row">Higher education</th><td data-label="Typical requirements">Occupied buildings, tight mechanical rooms, summer shutdowns</td><td data-label="What we usually build">Knockdown delivery, quiet fan arrays, phased installation</td></tr>
+          <tr><td class="tag">A-7</td><th scope="row">Food and beverage</th><td data-label="Typical requirements">Washdown areas, process heat, sanitary design</td><td data-label="What we usually build">Stainless construction, makeup air for ovens and process lines</td></tr>
+          <tr><td class="tag">A-8</td><th scope="row">Heavy industry</th><td data-label="Typical requirements">Hot, dusty, or corrosive airstreams</td><td data-label="What we usually build">Radial-wheel process fans, high-temperature bearings, alloy construction</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="section" id="process" aria-labelledby="process-h">
+    <div class="section-head">
+      <p class="label">How a project runs</p>
+      <h2 id="process-h">From first call to startup.</h2>
+      <p>One application engineer stays with your project from selection through startup, so the person answering your questions knows the unit.</p>
+    </div>
+    <ol class="steps">
+      <li>
+        <span class="step-n">01</span>
+        <h3>Application review</h3>
+        <span class="step-t">Day 1</span>
+        <p>Send drawings, an equipment schedule, or photos of the unit you're replacing. An application engineer calls back within one business day.</p>
+      </li>
+      <li>
+        <span class="step-n">02</span>
+        <h3>Selection and submittals</h3>
+        <span class="step-t">Weeks 1–2</span>
+        <p>Performance, sound data, and general-arrangement drawings for your review. Revisions come back in days.</p>
+      </li>
+      <li>
+        <span class="step-n">03</span>
+        <h3>Fabrication</h3>
+        <span class="step-t">Weeks 3–12</span>
+        <p>Casings, coils, and fan wheels are built in our own plant. You get build photos every week.</p>
+      </li>
+      <li>
+        <span class="step-n">04</span>
+        <h3>Factory testing</h3>
+        <span class="step-t">Before shipping</span>
+        <p>Every unit is run-tested for airflow, vibration, and casing leakage. You're welcome to witness the test.</p>
+      </li>
+      <li>
+        <span class="step-n">05</span>
+        <h3>Delivery and startup</h3>
+        <span class="step-t">On site</span>
+        <p>Units split to suit your rigging plan. Our crew reassembles, starts up, and trains your operators.</p>
+      </li>
+    </ol>
+    <dl class="plant">
+      <div><dt>years building custom air handling equipment</dt><dd>38</dd></div>
+      <div><dt>square feet of plant, with coil and fan shops under one roof</dt><dd>210,000</dd></div>
+      <div><dt>of units run-tested before they leave the plant</dt><dd>100%</dd></div>
+      <div><dt>parts and service line, staffed by our own technicians</dt><dd>24/7</dd></div>
+    </dl>
+  </section>
+
+  <section class="section" id="quote" aria-labelledby="quote-h">
+    <div class="contact-grid">
+      <div class="contact-info">
+        <p class="label">Start a project</p>
+        <h2 id="quote-h">Tell us what the unit has to do.</h2>
+        <p>Send whatever you have: an equipment schedule, drawings, a nameplate photo, or just the problem. An application engineer will call you within one business day.</p>
+        <dl class="contacts">
+          <div>
+            <dt>Applications engineering, parts and service</dt>
+            <dd><a class="phone" href="tel:+18007168955">1-800-716-8955</a><button type="button" class="copy" data-copy="1-800-716-8955">Copy</button></dd>
+          </div>
+          <div>
+            <dt>Email</dt>
+            <dd><a href="mailto:info@customairequipment.com">info@customairequipment.com</a></dd>
+          </div>
+          <div>
+            <dt>Plant and offices</dt>
+            <dd>4100 Foundry Road, Harlow Springs</dd>
+          </div>
+          <div>
+            <dt>Office hours</dt>
+            <dd>Monday to Friday, 7:00–17:00</dd>
+          </div>
+        </dl>
+      </div>
+
+      <div class="form-sheet sheet">
+        <form id="quote-form" novalidate>
+          <div class="f-grid">
+            <div class="field">
+              <label for="f-name">Name <span class="req">(required)</span></label>
+              <input id="f-name" name="name" autocomplete="name" required aria-describedby="e-name">
+              <p class="err" id="e-name"></p>
+            </div>
+            <div class="field">
+              <label for="f-company">Company</label>
+              <input id="f-company" name="company" autocomplete="organization">
+            </div>
+            <div class="field">
+              <label for="f-email">Email <span class="req">(required)</span></label>
+              <input id="f-email" name="email" type="email" autocomplete="email" required aria-describedby="e-email">
+              <p class="err" id="e-email"></p>
+            </div>
+            <div class="field">
+              <label for="f-phone">Phone</label>
+              <input id="f-phone" name="phone" type="tel" autocomplete="tel">
+            </div>
+            <div class="field">
+              <label for="f-type">Project type</label>
+              <select id="f-type" name="type">
+                <option>Custom air handler</option>
+                <option>Fan array</option>
+                <option>Industrial fan</option>
+                <option>Retrofit or replacement</option>
+                <option>Not sure yet</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="f-cfm">Approximate airflow (CFM)</label>
+              <input id="f-cfm" name="cfm" type="number" inputmode="numeric" min="0" step="500" placeholder="e.g. 25000">
+            </div>
+            <div class="field full">
+              <label for="f-when">When do you need equipment on site?</label>
+              <select id="f-when" name="when">
+                <option>Within 12 weeks</option>
+                <option selected>In 3 to 6 months</option>
+                <option>In 6 months or more</option>
+                <option>Budget pricing only</option>
+              </select>
+            </div>
+            <div class="field full">
+              <label for="f-details">Project details</label>
+              <textarea id="f-details" name="details" rows="6" placeholder="Building type and location, design conditions, access limits, the unit you're replacing…"></textarea>
+            </div>
+          </div>
+          <div class="f-foot">
+            <button type="submit" class="btn btn-primary">Send request</button>
+            <p class="note">We reply within one business day.</p>
+          </div>
+        </form>
+
+        <div class="sent" id="sent" tabindex="-1" hidden>
+          <p class="label">Request ready</p>
+          <h3 id="sent-h">Thanks, <span id="sent-name">there</span>.</h3>
+          <p class="note">This preview site isn't connected to an inbox yet, so nothing has been sent. Copy the request below and email it to info@customairequipment.com, or call 1-800-716-8955.</p>
+          <pre id="sent-summary"></pre>
+          <div class="sent-actions">
+            <button type="button" class="btn btn-primary" id="copy-summary">Copy request</button>
+            <button type="button" class="btn btn-ghost" id="edit-request">Edit request</button>
+          </div>
+          <p class="sk-status" id="copy-status" role="status"></p>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-foot">
+  <div class="foot-row">
+    <div class="foot-brand">
+      <a class="brand" href="#top" aria-label="Custom Air Equipment, an HSM Company, back to top">
+        <svg viewBox="0 0 32 32" aria-hidden="true">
+          <rect class="logo-tile" x="0" y="0" width="32" height="32" rx="2"/>
+          <circle class="logo-wheel" cx="16" cy="16" r="10.2"/>
+          <line class="logo-wheel" x1="19.4" y1="16" x2="23.2" y2="11.3"/>
+          <line class="logo-wheel" x1="19.4" y1="16" x2="23.2" y2="11.3" transform="rotate(60 16 16)"/>
+          <line class="logo-wheel" x1="19.4" y1="16" x2="23.2" y2="11.3" transform="rotate(120 16 16)"/>
+          <line class="logo-wheel" x1="19.4" y1="16" x2="23.2" y2="11.3" transform="rotate(180 16 16)"/>
+          <line class="logo-wheel" x1="19.4" y1="16" x2="23.2" y2="11.3" transform="rotate(240 16 16)"/>
+          <line class="logo-wheel" x1="19.4" y1="16" x2="23.2" y2="11.3" transform="rotate(300 16 16)"/>
+          <circle class="logo-hub" cx="16" cy="16" r="2.4"/>
+        </svg>
+        <span><span class="brand-name">CUSTOM AIR EQUIPMENT</span><span class="brand-sub">An HSM Company</span></span>
+      </a>
+      <p>Custom air handling units and industrial fans, engineered to order and run-tested before they ship. An HSM Company.</p>
+    </div>
+    <nav class="foot-nav" aria-label="Footer">
+      <a href="#products">Products</a>
+      <a href="#sketch">Unit sketcher</a>
+      <a href="#why">Why custom</a>
+      <a href="#applications">Applications</a>
+      <a href="#process">Process</a>
+      <a href="#quote">Request a quote</a>
+    </nav>
+    <p class="foot-fine">© 2026 Custom Air Equipment, an HSM Company. Specifications are subject to change without notice. Unit sketcher results are preliminary estimates, not engineered selections.</p>
+  </div>
+</footer>
+
+<script>
+(function () {
+  "use strict";
+  var $ = function (s, r) { return (r || document).querySelector(s); };
+  var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+  var reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* ---------- formatting ---------- */
+  function fmt(n) { return Math.round(n).toLocaleString("en-US"); }
+  function r1(n) { return Math.round(n * 10) / 10; }
+  function ftin(inches) {
+    var ft = Math.floor(inches / 12), r = Math.round(inches - ft * 12);
+    if (r === 12) { ft += 1; r = 0; }
+    return ft + "′-" + r + "″";
+  }
+  function meters(inches) { return (inches * 0.0254).toFixed(2); }
+  function pad2(n) { return (n < 10 ? "0" : "") + n; }
+  var now = new Date();
+  var today = now.getFullYear() + "-" + pad2(now.getMonth() + 1) + "-" + pad2(now.getDate());
+
+  /* ---------- sketcher data ---------- */
+  // Canonical upstream-to-downstream order. len = typical section length (in), dp = pressure drop (in. w.g.)
+  var SECTIONS = [
+    { id: "mix",    name: "Intake and mixing box",     len: 36, dp: 0.15 },
+    { id: "pre",    name: "Pre-filter, MERV 8",        len: 12, dp: 0.45 },
+    { id: "erw",    name: "Energy recovery wheel",     len: 42, dp: 0.80 },
+    { id: "heat",   name: "Heating coil, hot water",   len: 18, dp: 0.20 },
+    { id: "cool",   name: "Cooling coil, chilled water", len: 30, dp: 0.90 },
+    { id: "uv",     name: "UV-C lamps",                len: 12, dp: 0.05 },
+    { id: "access", name: "Access section",            len: 24, dp: 0.00 },
+    { id: "fan",    name: "Fan array",                 len: 0,  dp: 0.00 },
+    { id: "atten",  name: "Sound attenuator",          len: 48, dp: 0.35 },
+    { id: "hum",    name: "Steam humidifier",          len: 36, dp: 0.10 },
+    { id: "final",  name: "Final filter, MERV 14",     len: 30, dp: 0.75 },
+    { id: "hepa",   name: "HEPA filter",               len: 24, dp: 1.20 },
+    { id: "dis",    name: "Discharge plenum",          len: 36, dp: 0.10 }
+  ];
+  var BY_ID = {};
+  SECTIONS.forEach(function (s) { BY_ID[s.id] = s; });
+  function fanLen(cfm) { return Math.round(34 + Math.sqrt(cfm) / 12); }
+  function secLen(id, cfm) { return id === "fan" ? fanLen(cfm) : BY_ID[id].len; }
+
+  var PRESETS = {
+    office:   { cfm: 24000, esp: 1.5,  s: ["mix", "pre", "heat", "cool", "fan", "final", "dis"] },
+    hospital: { cfm: 30000, esp: 2.0,  s: ["mix", "pre", "erw", "heat", "cool", "uv", "fan", "atten", "hum", "final", "dis"] },
+    lab:      { cfm: 40000, esp: 2.5,  s: ["mix", "pre", "heat", "cool", "access", "fan", "final", "dis"] },
+    data:     { cfm: 60000, esp: 0.75, s: ["mix", "pre", "cool", "fan", "dis"] }
+  };
+
+  var state = { cfm: 30000, esp: 2.0, sel: {} };
+  PRESETS.hospital.s.forEach(function (id) { state.sel[id] = true; });
+
+  function fanGrid(cfm, W, H) {
+    var n = Math.max(1, Math.ceil(cfm / 6500)), best = null;
+    for (var rows = 1; rows <= n; rows++) {
+      var cols = Math.ceil(n / rows);
+      var score = Math.abs(Math.log((W / cols) / (H / rows))) + (rows * cols - n) * 0.25;
+      if (!best || score < best.score) best = { rows: rows, cols: cols, score: score };
+    }
+    return { rows: best.rows, cols: best.cols, n: best.rows * best.cols };
+  }
+
+  function calc() {
+    var secs = SECTIONS.filter(function (s) { return state.sel[s.id]; }).map(function (s) {
+      return { id: s.id, name: s.name, dp: s.dp, len: secLen(s.id, state.cfm) };
+    });
+    var L = secs.reduce(function (a, s) { return a + s.len; }, 0);
+    var area = state.cfm / 500;                 // coil face area, ft² at 500 fpm
+    var hFt = Math.sqrt(area / 1.45), wFt = area / hFt;
+    var H = Math.round(hFt * 12 + 14);          // + base rail, panels, drain pan
+    var W = Math.round(wFt * 12 + 6);           // + panels
+    var isp = secs.reduce(function (a, s) { return a + s.dp; }, 0);
+    var tsp = isp + state.esp;
+    return {
+      secs: secs, L: L, H: H, W: W, isp: isp, tsp: tsp,
+      grid: fanGrid(state.cfm, W, H),
+      hasFan: !!state.sel.fan,
+      bhp: state.cfm * tsp / (6356 * 0.65)
+    };
+  }
+
+  /* ---------- drawing helpers ---------- */
+  function ln(x1, y1, x2, y2, cls) {
+    return '<line class="' + (cls || "g") + '" x1="' + r1(x1) + '" y1="' + r1(y1) + '" x2="' + r1(x2) + '" y2="' + r1(y2) + '"/>';
+  }
+  function blades(cx, cy, R) {
+    var o = "";
+    for (var k = 0; k < 6; k++) {
+      var a = k * Math.PI / 3, b = a - 0.6;
+      o += ln(cx + 0.3 * R * Math.cos(a), cy + 0.3 * R * Math.sin(a), cx + 0.88 * R * Math.cos(b), cy + 0.88 * R * Math.sin(b));
+    }
+    return o + '<circle class="g g-fill" cx="' + r1(cx) + '" cy="' + r1(cy) + '" r="' + r1(Math.max(1.2, R * 0.18)) + '"/>';
+  }
+  function spinning(cx, cy, R) {
+    return '<g class="fan-rot" style="transform-origin:' + r1(cx) + 'px ' + r1(cy) + 'px">' + blades(cx, cy, R) + "</g>";
+  }
+  function coil(x, y, w, h, cls, frac, pan) {
+    var bw = Math.max(5, w * frac), bx = x + (w - bw) / 2, by = y + 5, bh = h - (pan ? 16 : 10);
+    var o = '<rect class="g ' + cls + '" x="' + r1(bx) + '" y="' + r1(by) + '" width="' + r1(bw) + '" height="' + r1(bh) + '"/>';
+    var fins = Math.max(2, Math.floor(bw / 3.4));
+    for (var i = 1; i < fins; i++) { var fx = bx + i * bw / fins; o += ln(fx, by + 1, fx, by + bh - 1, "g g-thin " + cls); }
+    o += ln(bx, by + bh, bx + bw, by, "g " + cls);
+    if (pan) o += '<path class="g ' + cls + '" d="M' + r1(bx - 4) + " " + r1(y + h - 10) + "V" + r1(y + h - 4) + "H" + r1(bx + bw + 4) + "V" + r1(y + h - 10) + '"/>';
+    return o;
+  }
+
+  // One glyph per section type, drawn inside the section's box (x, y, w, h)
+  var GLYPH = {
+    mix: function (x, y, w, h) {
+      var o = "", bx = x + Math.max(6, w * 0.16), n = Math.max(3, Math.floor(h / 16));
+      o += ln(bx, y + 3, bx, y + h - 3, "g g-thin");
+      for (var i = 0; i < n; i++) { var yy = y + h * (i + 0.5) / n; o += ln(bx - 4, yy + 4, bx + 4, yy - 4); }
+      var ty = y + Math.max(6, h * 0.1), m = Math.max(2, Math.floor(w * 0.5 / 12));
+      o += ln(x + w * 0.38, ty, x + w - 3, ty, "g g-thin");
+      for (var j = 0; j < m; j++) { var xx = x + w * (0.44 + 0.5 * (j + 0.5) / m); o += ln(xx - 4, ty + 4, xx + 4, ty - 4); }
+      return o;
+    },
+    pre: function (x, y, w, h) {
+      var cx = x + w / 2, a = Math.min(w * 0.22, 6), p = "M" + r1(cx) + " " + r1(y + 3), k = 0;
+      for (var yy = y + 3; yy < y + h - 3; yy += 7) { k++; p += " L" + r1(cx + (k % 2 ? a : -a)) + " " + r1(Math.min(yy + 7, y + h - 3)); }
+      return '<path class="g" d="' + p + '"/>';
+    },
+    erw: function (x, y, w, h) {
+      var cx = x + w / 2, cy = y + h / 2, rx = Math.max(3, Math.min(w * 0.2, 11)), ry = h / 2 - 4;
+      var o = '<ellipse class="g g-fill" cx="' + r1(cx) + '" cy="' + r1(cy) + '" rx="' + r1(rx) + '" ry="' + r1(ry) + '"/>';
+      [-0.7, -0.35, 0, 0.35, 0.7].forEach(function (t) { var yy = cy + t * ry, hw = rx * Math.sqrt(1 - t * t); o += ln(cx - hw, yy, cx + hw, yy, "g g-thin"); });
+      return o + '<circle class="g g-fill" cx="' + r1(cx) + '" cy="' + r1(cy) + '" r="2.5"/>';
+    },
+    heat: function (x, y, w, h) { return coil(x, y, w, h, "g-heat", 0.36, false); },
+    cool: function (x, y, w, h) { return coil(x, y, w, h, "g-cool", 0.46, true); },
+    uv: function (x, y, w, h) {
+      var cx = x + w / 2, o = "";
+      [0.3, 0.5, 0.7].forEach(function (f) {
+        var yy = y + h * f;
+        o += '<rect class="g g-lamp" x="' + r1(cx - 4.5) + '" y="' + r1(yy - 1.8) + '" width="9" height="3.6" rx="1.8"/>';
+        o += ln(cx, yy - 4.5, cx, yy - 8, "g g-thin") + ln(cx, yy + 4.5, cx, yy + 8, "g g-thin");
+      });
+      return o;
+    },
+    access: function (x, y, w, h) {
+      var dx = x + w * 0.2, dw = w * 0.6, dy = y + h * 0.12, dh = h * 0.76;
+      return '<rect class="g g-thin" x="' + r1(dx) + '" y="' + r1(dy) + '" width="' + r1(dw) + '" height="' + r1(dh) + '"/>' +
+        '<circle class="g" cx="' + r1(dx + dw * 0.78) + '" cy="' + r1(dy + dh / 2) + '" r="1.7"/>' +
+        ln(dx, dy + dh * 0.18, dx + 3, dy + dh * 0.18) + ln(dx, dy + dh * 0.82, dx + 3, dy + dh * 0.82);
+    },
+    fan: function (x, y, w, h, c) {
+      var rows = c.grid.rows, wall = x + Math.max(4, w * 0.14), o = ln(wall, y + 2, wall, y + h - 2);
+      var R = Math.max(3, Math.min(w * 0.28, (h / rows) * 0.36)), cx = x + w * 0.52;
+      for (var i = 0; i < rows; i++) {
+        var cy = y + h * (i + 0.5) / rows;
+        o += '<path class="g g-thin" d="M' + r1(wall) + " " + r1(cy - R * 0.8) + "L" + r1(cx - R) + " " + r1(cy - R * 0.45) +
+             "M" + r1(wall) + " " + r1(cy + R * 0.8) + "L" + r1(cx - R) + " " + r1(cy + R * 0.45) + '"/>';
+        o += '<circle class="g g-fill" cx="' + r1(cx) + '" cy="' + r1(cy) + '" r="' + r1(R) + '"/>';
+        o += spinning(cx, cy, R);
+        var mw = Math.min(R * 0.7, x + w - (cx + R) - 3);
+        if (mw > 2) o += '<rect class="g g-thin" x="' + r1(cx + R + 1) + '" y="' + r1(cy - R * 0.3) + '" width="' + r1(mw) + '" height="' + r1(R * 0.6) + '"/>';
+      }
+      return o;
+    },
+    atten: function (x, y, w, h) {
+      var k = Math.max(2, Math.round(h / 28)), o = "";
+      for (var i = 0; i < k; i++) {
+        var cy = y + h * (i + 0.5) / k, t = Math.min((h / k) * 0.42, 12), x1 = x + w * 0.12, x2 = x + w * 0.88;
+        o += '<rect class="g g-pod" x="' + r1(x1) + '" y="' + r1(cy - t / 2) + '" width="' + r1(x2 - x1) + '" height="' + r1(t) + '" rx="' + r1(t / 2) + '"/>';
+      }
+      return o;
+    },
+    hum: function (x, y, w, h) {
+      var mx = x + Math.max(5, w * 0.22), o = '<rect class="g g-fill" x="' + r1(mx - 1.5) + '" y="' + r1(y + h * 0.12) + '" width="3" height="' + r1(h * 0.76) + '"/>';
+      var len = Math.min(24, x + w - mx - 6);
+      if (len > 6) {
+        var seg = len / 3;
+        [0.26, 0.42, 0.58, 0.74].forEach(function (f) {
+          var yy = y + h * f;
+          o += '<path class="g g-thin g-cool" d="M' + r1(mx + 3) + " " + r1(yy) + " q" + r1(seg / 2) + " -3 " + r1(seg) + " 0 t" + r1(seg) + " 0 t" + r1(seg) + ' 0"/>';
+        });
+      }
+      return o;
+    },
+    final: function (x, y, w, h) {
+      var fx = x + Math.max(4, w * 0.16), ex = x + w - Math.max(5, w * 0.14), k = Math.max(2, Math.round(h / 24)), o = ln(fx, y + 2, fx, y + h - 2);
+      for (var i = 0; i < k; i++) {
+        var yt = y + h * i / k + 2, yb = y + h * (i + 1) / k - 2, mid = (yt + yb) / 2, q = (yb - yt) * 0.3;
+        o += '<path class="g" d="M' + r1(fx) + " " + r1(yt) + " L" + r1(ex) + " " + r1(mid - q / 2) + " Q" + r1(ex + 3) + " " + r1(mid) + " " + r1(ex) + " " + r1(mid + q / 2) + " L" + r1(fx) + " " + r1(yb) + '"/>';
+      }
+      return o;
+    },
+    hepa: function (x, y, w, h) {
+      var x1 = x + w * 0.28, x2 = x + w * 0.72, o = ln(x1, y + 2, x1, y + h - 2) + ln(x2, y + 2, x2, y + h - 2);
+      var p = "M" + r1(x1) + " " + r1(y + 3), t = 0;
+      for (var yy = y + 3; yy < y + h - 3; yy += 3.2) { t++; p += " L" + r1(t % 2 ? x2 : x1) + " " + r1(Math.min(yy + 3.2, y + h - 3)); }
+      return o + '<path class="g g-thin" d="' + p + '"/>';
+    },
+    dis: function (x, y, w) {
+      return ln(x + w * 0.2 + 1.5, y, x + w * 0.8 - 1.5, y, "u-knock") + ln(x + w * 0.2, y - 5, x + w * 0.2, y + 5) + ln(x + w * 0.8, y - 5, x + w * 0.8, y + 5);
+    }
+  };
+
+  // Proportional widths with a floor so narrow sections stay legible on phones
+  function layoutWidths(lens, avail, minPx) {
+    var n = lens.length, fixed = {}, changed = true, guard = 0;
+    if (avail <= n * minPx) return lens.map(function () { return avail / n; });
+    while (changed && guard++ < n) {
+      changed = false;
+      var fixedCount = Object.keys(fixed).length, remAvail = avail - fixedCount * minPx, remLen = 0;
+      lens.forEach(function (l, i) { if (!fixed[i]) remLen += l; });
+      lens.forEach(function (l, i) {
+        if (!fixed[i] && (l / remLen) * remAvail < minPx) { fixed[i] = true; changed = true; }
+      });
+    }
+    var fc = Object.keys(fixed).length, ra = avail - fc * minPx, rl = 0;
+    lens.forEach(function (l, i) { if (!fixed[i]) rl += l; });
+    return lens.map(function (l, i) { return fixed[i] ? minPx : (l / rl) * ra; });
+  }
+
+  /* ---------- renderers ---------- */
+  var lastW = { elev: 0, end: 0 };
+
+  function renderElevation(c) {
+    var wrap = $("#elev-wrap"), svg = $("#elev");
+    var cw = Math.max(300, Math.round(wrap.clientWidth || 800));
+    lastW.elev = cw;
+    var narrow = cw < 560;
+    var padL = narrow ? 36 : 64, padR = narrow ? 36 : 64, padT = 48;
+    var avail = cw - padL - padR, n = c.secs.length;
+    if (!n) {
+      svg.setAttribute("viewBox", "0 0 " + cw + " 190");
+      svg.setAttribute("height", "190");
+      svg.innerHTML = '<text class="tx-empty" x="' + cw / 2 + '" y="100" text-anchor="middle">Add a section below to start the drawing.</text>';
+      return;
+    }
+    var s = avail / c.L;
+    var widths = layoutWidths(c.secs.map(function (x) { return x.len; }), avail, Math.min(narrow ? 26 : 32, avail / n));
+    var drawH = Math.max(narrow ? 100 : 136, Math.min(narrow ? 176 : 290, c.H * s));
+    var railH = Math.max(6, Math.min(14, 5 * s));
+    var X0 = padL, Y0 = padT, drawW = avail;
+    var baseY = Y0 + drawH + railH, numY = baseY + 18, dimY = baseY + 48, H = dimY + 30;
+
+    var o = '<defs>' +
+      '<marker id="elev-ah" viewBox="0 0 10 10" refX="9.5" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path class="ah" d="M0 1.5 L10 5 L0 8.5 Z"/></marker>' +
+      '<marker id="air-ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path class="air-head" d="M0 0 L10 5 L0 10 Z"/></marker>' +
+      '</defs>';
+
+    var dur = Math.max(0.45, 2.1 - state.cfm / 70000).toFixed(2);
+    [0.2, 0.4, 0.6, 0.8].forEach(function (f) {
+      var yy = r1(Y0 + drawH * f);
+      o += '<line class="flow" x1="' + (X0 + 3) + '" y1="' + yy + '" x2="' + r1(X0 + drawW - 3) + '" y2="' + yy + '" style="animation-duration:' + dur + 's"/>';
+    });
+
+    o += '<rect class="u-rail" x="' + X0 + '" y="' + r1(Y0 + drawH) + '" width="' + r1(drawW) + '" height="' + r1(railH) + '"/>';
+    o += '<circle class="g g-fill" cx="' + r1(X0 + 9) + '" cy="' + r1(Y0 + drawH + railH / 2) + '" r="2.2"/>';
+    o += '<circle class="g g-fill" cx="' + r1(X0 + drawW - 9) + '" cy="' + r1(Y0 + drawH + railH / 2) + '" r="2.2"/>';
+
+    var xs = [], x = X0;
+    c.secs.forEach(function (sec, i) {
+      var w = widths[i];
+      xs.push(x);
+      o += '<g class="sec"><title>' + (i + 1) + ". " + sec.name + ": " + sec.len + " in long, " + sec.dp.toFixed(2) + " in. w.g. pressure drop</title>";
+      o += '<rect class="sec-hit" x="' + r1(x) + '" y="' + Y0 + '" width="' + r1(w) + '" height="' + r1(drawH) + '"/>';
+      o += GLYPH[sec.id](x, Y0, w, drawH, c);
+      o += "</g>";
+      if (i > 0) o += ln(x, Y0, x, Y0 + drawH, "u-part");
+      var cx = x + w / 2;
+      o += '<circle class="num-c" cx="' + r1(cx) + '" cy="' + r1(numY) + '" r="9"/><text class="num-t" x="' + r1(cx) + '" y="' + r1(numY + 3.5) + '">' + (i + 1) + "</text>";
+      x += w;
+    });
+    o += '<rect class="u-case" x="' + X0 + '" y="' + Y0 + '" width="' + r1(drawW) + '" height="' + r1(drawH) + '"/>';
+    // redraw the discharge opening on top of the casing outline
+    var disI = -1, mixI = -1;
+    c.secs.forEach(function (sec, i) { if (sec.id === "dis") disI = i; if (sec.id === "mix") mixI = i; });
+    if (disI >= 0) o += GLYPH.dis(xs[disI], Y0, widths[disI]);
+
+    var inY = r1(Y0 + drawH * 0.5);
+    o += '<line class="air" x1="' + (X0 - padL + 8) + '" y1="' + inY + '" x2="' + (X0 - 8) + '" y2="' + inY + '" marker-end="url(#air-ah)"/>';
+    o += '<text class="tx-air" x="' + (X0 - padL + 8) + '" y="' + r1(inY - 10) + '">' + (mixI >= 0 ? "OA" : "IN") + "</text>";
+    if (mixI >= 0) {
+      var mx = r1(xs[mixI] + widths[mixI] * 0.72);
+      o += '<line class="air" x1="' + mx + '" y1="' + (Y0 - 38) + '" x2="' + mx + '" y2="' + (Y0 - 8) + '" marker-end="url(#air-ah)"/>';
+      o += '<text class="tx-air" x="' + r1(mx + 8) + '" y="' + (Y0 - 26) + '">RA</text>';
+    }
+    if (disI >= 0) {
+      var dx = r1(xs[disI] + widths[disI] / 2);
+      o += '<line class="air" x1="' + dx + '" y1="' + r1(Y0 + drawH * 0.62) + '" x2="' + dx + '" y2="' + (Y0 - 34) + '" marker-end="url(#air-ah)"/>';
+      o += '<text class="tx-air" x="' + r1(dx + 8) + '" y="' + (Y0 - 26) + '">SA</text>';
+    } else {
+      var ox = r1(X0 + drawW);
+      o += '<line class="air" x1="' + (ox + 8) + '" y1="' + inY + '" x2="' + r1(ox + padR - 8) + '" y2="' + inY + '" marker-end="url(#air-ah)"/>';
+      o += '<text class="tx-air" x="' + r1(ox + padR - 8) + '" y="' + r1(inY - 10) + '" text-anchor="end">SA</text>';
+    }
+
+    o += ln(X0, baseY + 4, X0, dimY + 7, "ln-dim") + ln(X0 + drawW, baseY + 4, X0 + drawW, dimY + 7, "ln-dim");
+    o += '<line class="ln-dim" x1="' + (X0 + 1) + '" y1="' + dimY + '" x2="' + r1(X0 + drawW - 1) + '" y2="' + dimY + '" marker-start="url(#elev-ah)" marker-end="url(#elev-ah)"/>';
+    var dimLabel = "OVERALL " + ftin(c.L) + " (" + meters(c.L) + " m)", dimLW = dimLabel.length * 8.4 + 16;
+    o += '<rect class="dim-bg" x="' + r1(X0 + drawW / 2 - dimLW / 2) + '" y="' + (dimY - 9) + '" width="' + r1(dimLW) + '" height="18"/>';
+    o += '<text class="tx" x="' + r1(X0 + drawW / 2) + '" y="' + (dimY + 4) + '" text-anchor="middle">' + dimLabel + "</text>";
+
+    svg.setAttribute("viewBox", "0 0 " + cw + " " + r1(H));
+    svg.setAttribute("height", r1(H));
+    svg.innerHTML = o;
+  }
+
+  function person(px, g, k) {
+    var d = "M" + r1(px - 8.5 * k) + " " + r1(g - 56 * k) +
+      " Q" + r1(px) + " " + r1(g - 60 * k) + " " + r1(px + 8.5 * k) + " " + r1(g - 56 * k) +
+      " L" + r1(px + 7 * k) + " " + r1(g - 33 * k) + " L" + r1(px + 5.5 * k) + " " + r1(g) +
+      " L" + r1(px + 1.2 * k) + " " + r1(g) + " L" + r1(px) + " " + r1(g - 27 * k) +
+      " L" + r1(px - 1.2 * k) + " " + r1(g) + " L" + r1(px - 5.5 * k) + " " + r1(g) +
+      " L" + r1(px - 7 * k) + " " + r1(g - 33 * k) + " Z";
+    return '<circle class="person" cx="' + r1(px) + '" cy="' + r1(g - 64.5 * k) + '" r="' + r1(4.8 * k) + '"/><path class="person" d="' + d + '"/>';
+  }
+
+  function renderEnd(c) {
+    var wrap = $("#end-wrap"), svg = $("#endview");
+    var cw = Math.max(260, Math.round(wrap.clientWidth || 360)), ch = 214, ground = ch - 36;
+    lastW.end = cw;
+    var personH = 70, personW = 20, gap = 22;
+    var k = Math.min((cw - 56) / (c.W + gap + personW), (ground - 36) / Math.max(c.H, personH));
+    var uw = c.W * k, uh = c.H * k, totalW = uw + (gap + personW) * k;
+    var ux = (cw - totalW) / 2, uy = ground - uh, rail = Math.max(3, 5 * k);
+    var o = ln(10, ground, cw - 10, ground, "ground");
+    for (var gx = 18; gx < cw - 8; gx += 9) o += ln(gx, ground + 1, gx - 6, ground + 7, "ground-hatch");
+    o += '<rect class="u-rail" x="' + r1(ux) + '" y="' + r1(ground - rail) + '" width="' + r1(uw) + '" height="' + r1(rail) + '"/>';
+    o += '<rect class="u-case" x="' + r1(ux) + '" y="' + r1(uy) + '" width="' + r1(uw) + '" height="' + r1(uh - rail) + '"/>';
+    var ix = ux + 3, iy = uy + 3, iw = uw - 6, ih = uh - rail - 6;
+    if (c.hasFan) {
+      var cwid = iw / c.grid.cols, chei = ih / c.grid.rows, R = Math.max(2, Math.min(cwid, chei) * 0.4);
+      for (var q = 1; q < c.grid.cols; q++) o += ln(ix + cwid * q, iy, ix + cwid * q, iy + ih, "g g-thin");
+      for (var rr = 1; rr < c.grid.rows; rr++) o += ln(ix, iy + chei * rr, ix + iw, iy + chei * rr, "g g-thin");
+      for (var r = 0; r < c.grid.rows; r++) {
+        for (var cc = 0; cc < c.grid.cols; cc++) {
+          var cx = ix + cwid * (cc + 0.5), cy = iy + chei * (r + 0.5);
+          o += '<circle class="g g-fill" cx="' + r1(cx) + '" cy="' + r1(cy) + '" r="' + r1(R) + '"/>' + spinning(cx, cy, R);
+        }
+      }
+    } else {
+      o += '<text class="tx" x="' + r1(ux + uw / 2) + '" y="' + r1(uy + uh / 2) + '" text-anchor="middle">NO FAN</text>';
+    }
+    var px = ux + uw + gap * k + (personW * k) / 2;
+    o += person(px, ground, k);
+    o += '<text class="tx" x="' + r1(px) + '" y="' + r1(ground - personH * k - 9) + '" text-anchor="middle">5′-10″</text>';
+    o += '<text class="tx" x="' + r1(ux + uw / 2) + '" y="' + (ground + 24) + '" text-anchor="middle">' + ftin(c.W) + " W × " + ftin(c.H) + " H</text>";
+    svg.setAttribute("viewBox", "0 0 " + cw + " " + ch);
+    svg.setAttribute("height", String(ch));
+    svg.innerHTML = o;
+  }
+
+  function setDD(sel, main, sub) { $(sel).innerHTML = main + (sub ? "<small>" + sub + "</small>" : ""); }
+
+  function renderReadout(c) {
+    setDD("#r-cfm", fmt(state.cfm) + " CFM", fmt(state.cfm * 0.471947) + " L/s");
+    setDD("#r-len", c.secs.length ? ftin(c.L) : "—", c.secs.length ? meters(c.L) + " m" : "no sections yet");
+    setDD("#r-wh", ftin(c.W) + " × " + ftin(c.H), meters(c.W) + " × " + meters(c.H) + " m");
+    $("#r-fans-row").classList.toggle("warn", !c.hasFan);
+    $("#r-bhp-row").classList.toggle("warn", !c.hasFan);
+    if (c.hasFan) {
+      setDD("#r-fans", c.grid.n + (c.grid.n === 1 ? " fan" : " fans") + " · " + c.grid.rows + " × " + c.grid.cols, "about " + fmt(Math.round(state.cfm / c.grid.n / 100) * 100) + " CFM each");
+      setDD("#r-bhp", c.bhp.toFixed(1) + " bhp", (c.bhp * 0.7457).toFixed(1) + " kW");
+    } else {
+      setDD("#r-fans", "None", "add a fan array");
+      setDD("#r-bhp", "—", "needs a fan array");
+    }
+    setDD("#r-tsp", c.tsp.toFixed(2) + " in. w.g.", fmt(c.tsp * 249.09) + " Pa · " + c.isp.toFixed(2) + " internal");
+  }
+
+  function buildChips() {
+    var ul = $("#sec-list");
+    ul.innerHTML = SECTIONS.map(function (s) {
+      return '<li><button type="button" class="sec-btn" data-id="' + s.id + '" aria-pressed="false">' +
+        '<span class="sec-tag" aria-hidden="true">+</span>' +
+        '<span><span class="sec-name">' + s.name + '</span><span class="sec-meta"></span></span></button></li>';
+    }).join("");
+    ul.addEventListener("click", function (e) {
+      var b = e.target.closest(".sec-btn");
+      if (!b) return;
+      var id = b.getAttribute("data-id");
+      if (state.sel[id]) delete state.sel[id]; else state.sel[id] = true;
+      render();
+    });
+  }
+
+  function renderChips(c) {
+    var order = c.secs.map(function (s) { return s.id; });
+    $$(".sec-btn").forEach(function (b) {
+      var id = b.getAttribute("data-id"), on = !!state.sel[id];
+      b.setAttribute("aria-pressed", on ? "true" : "false");
+      b.querySelector(".sec-tag").textContent = on ? String(order.indexOf(id) + 1) : "+";
+      b.querySelector(".sec-meta").textContent = secLen(id, state.cfm) + "″ long · " + BY_ID[id].dp.toFixed(2) + "″ w.g.";
+    });
+    $("#sec-count").textContent = order.length + (order.length === 1 ? " section" : " sections");
+  }
+
+  function syncPresets() {
+    var keys = Object.keys(state.sel).sort().join(",");
+    $$(".preset").forEach(function (b) {
+      var p = PRESETS[b.getAttribute("data-preset")];
+      var match = p.s.slice().sort().join(",") === keys && p.cfm === state.cfm && p.esp === state.esp;
+      b.setAttribute("aria-pressed", match ? "true" : "false");
+    });
+  }
+
+  function render() {
+    var c = calc();
+    renderElevation(c);
+    renderEnd(c);
+    renderReadout(c);
+    renderChips(c);
+    syncPresets();
+    $("#cfm-out").innerHTML = fmt(state.cfm) + " CFM <small>· " + fmt(state.cfm * 0.471947) + " L/s</small>";
+    $("#esp-out").innerHTML = state.esp.toFixed(2) + " in. w.g. <small>· " + fmt(state.esp * 249.09) + " Pa</small>";
+    $("#tb-dwg").textContent = "SK-" + ("00" + Math.round(state.cfm / 1000)).slice(-3) + "-" + c.secs.length;
+    $("#sketch-status").textContent = "";
+  }
+
+  /* ---------- sketcher wiring ---------- */
+  buildChips();
+  $("#tb-date").textContent = today;
+  $$(".preset").forEach(function (b) {
+    b.addEventListener("click", function () {
+      var p = PRESETS[b.getAttribute("data-preset")];
+      state.cfm = p.cfm; state.esp = p.esp; state.sel = {};
+      p.s.forEach(function (id) { state.sel[id] = true; });
+      $("#cfm").value = p.cfm; $("#esp").value = p.esp;
+      render();
+    });
+  });
+  $("#cfm").addEventListener("input", function (e) { state.cfm = +e.target.value; render(); });
+  $("#esp").addEventListener("input", function (e) { state.esp = +e.target.value; render(); });
+  render();
+
+  var raf = 0;
+  function onResize() {
+    cancelAnimationFrame(raf);
+    raf = requestAnimationFrame(function () {
+      var ew = Math.round($("#elev-wrap").clientWidth), nw = Math.round($("#end-wrap").clientWidth);
+      if (ew === lastW.elev && nw === lastW.end) return;
+      var c = calc();
+      renderElevation(c);
+      renderEnd(c);
+    });
+  }
+  if ("ResizeObserver" in window) {
+    var ro = new ResizeObserver(onResize);
+    ro.observe($("#elev-wrap"));
+    ro.observe($("#end-wrap"));
+  } else {
+    window.addEventListener("resize", onResize);
+  }
+
+  /* ---------- quote form ---------- */
+  var form = $("#quote-form"), sent = $("#sent");
+  function showForm() { form.hidden = false; sent.hidden = true; }
+
+  $("#send-sketch").addEventListener("click", function () {
+    var c = calc();
+    var lines = [
+      "Preliminary sketch, " + today,
+      "Airflow: " + fmt(state.cfm) + " CFM; external static " + state.esp.toFixed(2) + " in. w.g.",
+      "Sections: " + (c.secs.length ? c.secs.map(function (s, i) { return (i + 1) + ". " + s.name; }).join("; ") : "none yet"),
+      "Approximate size: " + ftin(c.L) + " L × " + ftin(c.W) + " W × " + ftin(c.H) + " H",
+      "Estimated total static " + c.tsp.toFixed(2) + " in. w.g." + (c.hasFan ? "; " + c.grid.n + "-fan array, about " + c.bhp.toFixed(1) + " bhp" : "")
+    ];
+    var ta = $("#f-details"), cur = ta.value;
+    var rest = cur.indexOf("Preliminary sketch") === 0 ? cur.split("\n\n").slice(1).join("\n\n") : cur;
+    ta.value = lines.join("\n") + (rest.trim() ? "\n\n" + rest : "");
+    $("#f-type").value = "Custom air handler";
+    $("#f-cfm").value = state.cfm;
+    showForm();
+    $("#sketch-status").textContent = "Added to your quote request below.";
+    $("#quote").scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" });
+    setTimeout(function () { $("#f-name").focus({ preventScroll: true }); }, reduceMotion ? 0 : 700);
+  });
+
+  $$("[data-project]").forEach(function (a) {
+    a.addEventListener("click", function () { $("#f-type").value = a.getAttribute("data-project"); showForm(); });
+  });
+
+  function setErr(input, errEl, msg) {
+    errEl.textContent = msg;
+    if (msg) input.setAttribute("aria-invalid", "true"); else input.removeAttribute("aria-invalid");
+  }
+  ["#f-name", "#f-email"].forEach(function (sel) {
+    $(sel).addEventListener("input", function () {
+      if ($(sel).getAttribute("aria-invalid")) setErr($(sel), $(sel === "#f-name" ? "#e-name" : "#e-email"), "");
+    });
+  });
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    var name = $("#f-name"), email = $("#f-email"), ok = true, ev = email.value.trim();
+    if (!name.value.trim()) { setErr(name, $("#e-name"), "Enter your name so the engineer knows who to ask for."); ok = false; }
+    else setErr(name, $("#e-name"), "");
+    if (!ev) { setErr(email, $("#e-email"), "Enter an email address so we can send your selection."); ok = false; }
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(ev)) { setErr(email, $("#e-email"), "Check the email address. It should look like name@company.com."); ok = false; }
+    else setErr(email, $("#e-email"), "");
+    if (!ok) { (name.getAttribute("aria-invalid") ? name : email).focus(); return; }
+
+    var v = function (sel) { return $(sel).value.trim(); };
+    var lines = [
+      "Quote request, " + today, "",
+      "Name: " + v("#f-name"),
+      "Company: " + (v("#f-company") || "—"),
+      "Email: " + v("#f-email"),
+      "Phone: " + (v("#f-phone") || "—"),
+      "Project type: " + v("#f-type"),
+      "Approximate airflow: " + (v("#f-cfm") ? fmt(+v("#f-cfm")) + " CFM" : "—"),
+      "Needed on site: " + v("#f-when")
+    ];
+    if (v("#f-details")) lines.push("", "Details:", v("#f-details"));
+    $("#sent-summary").textContent = lines.join("\n");
+    $("#sent-name").textContent = v("#f-name").split(/\s+/)[0];
+    $("#copy-status").textContent = "";
+    form.hidden = true;
+    sent.hidden = false;
+    sent.focus();
+  });
+  $("#edit-request").addEventListener("click", function () { showForm(); $("#f-name").focus(); });
+
+  function copyText(text, done, selectEl) {
+    function fallback() {
+      if (selectEl) {
+        var range = document.createRange(); range.selectNodeContents(selectEl);
+        var sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(range);
+      }
+      done(false);
+    }
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(function () { done(true); }, fallback);
+      else fallback();
+    } catch (err) { fallback(); }
+  }
+  $("#copy-summary").addEventListener("click", function () {
+    copyText($("#sent-summary").textContent, function (ok) {
+      $("#copy-status").textContent = ok ? "Copied to your clipboard." : "Copying was blocked, so the request is selected. Press Ctrl+C or ⌘C to copy it.";
+    }, $("#sent-summary"));
+  });
+  $$(".copy").forEach(function (b) {
+    b.addEventListener("click", function () {
+      copyText(b.getAttribute("data-copy"), function (ok) {
+        b.textContent = ok ? "Copied" : "Selected";
+        setTimeout(function () { b.textContent = "Copy"; }, 1600);
+      }, b.previousElementSibling);
+    });
+  });
+
+  /* ---------- header ---------- */
+  var head = $(".site-head");
+  function onScroll() { head.classList.toggle("scrolled", window.scrollY > 8); }
+  window.addEventListener("scroll", onScroll, { passive: true });
+  onScroll();
+  var menuBtn = $("#menu-btn"), nav = $("#nav");
+  function closeMenu() { nav.classList.remove("open"); menuBtn.setAttribute("aria-expanded", "false"); }
+  menuBtn.addEventListener("click", function () {
+    var open = nav.classList.toggle("open");
+    menuBtn.setAttribute("aria-expanded", open ? "true" : "false");
+  });
+  nav.addEventListener("click", function (e) { if (e.target.closest("a")) closeMenu(); });
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && nav.classList.contains("open")) { closeMenu(); menuBtn.focus(); }
+  });
+})();
+</script>
+</body>
+</html>
