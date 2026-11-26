@@ -32,6 +32,10 @@ $rows = ['Received' => date('M j, Y g:i a', strtotime($q['created_at'])), 'Name'
     <h2>3D design</h2>
     <p><?= e($d['summary'] ?? '') ?></p>
     <ol><?php foreach ($d['sections'] ?? [] as $sec): ?><li><?= e($sec) ?></li><?php endforeach; ?></ol>
+    <?php if (!empty($d['options']) && is_array($d['options'])): ?>
+    <h3>Options</h3>
+    <dl class="specs"><?php foreach ($d['options'] as $k => $v): ?><div><dt><?= e((string) $k) ?></dt><dd><?= e((string) $v) ?></dd></div><?php endforeach; ?></dl>
+    <?php endif; ?>
     <details><summary>Raw design data</summary><pre class="a-pre"><?= e(json_encode($d, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES)) ?></pre></details>
     <?php endif; ?>
   </section>

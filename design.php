@@ -12,7 +12,7 @@ page_head([
   <div class="wrap">
     <?= kicker('3d', 'unit configuration') ?>
     <h1>Design your unit.</h1>
-    <p class="lede">Choose the sections your airstream needs and set the airflow. Drag to turn the model, scroll or pinch to zoom. When it looks right, submit it and an application engineer will turn it into a real selection.</p>
+    <p class="lede">Choose the sections your airstream needs, set the airflow, and work through more than 50 options for casing, fans, coils, filters, recovery, controls and testing. Drag to turn the model, scroll or pinch to zoom. When it looks right, submit it and an application engineer will turn it into a real selection.</p>
   </div>
 </section>
 
@@ -34,22 +34,19 @@ page_head([
   <div class="dz-panel">
     <div class="dz-block">
       <p class="label" id="dz-preset-l">Start from a typical unit</p>
-      <div class="dz-presets" role="group" aria-labelledby="dz-preset-l">
-        <button type="button" class="dz-chip" data-preset="office">Office VAV</button>
-        <button type="button" class="dz-chip" data-preset="hospital">Hospital, 100% OA</button>
-        <button type="button" class="dz-chip" data-preset="lab">Lab makeup air</button>
-        <button type="button" class="dz-chip" data-preset="data">Data hall</button>
-      </div>
+      <div class="dz-presets" id="dz-presets" role="group" aria-labelledby="dz-preset-l"></div>
     </div>
     <div class="dz-block dz-sliders">
       <div class="field"><label for="dz-cfm">Airflow <output id="dz-cfm-o"></output></label><input type="range" id="dz-cfm" min="2000" max="120000" step="1000" value="30000"></div>
       <div class="field"><label for="dz-esp">External static <output id="dz-esp-o"></output></label><input type="range" id="dz-esp" min="0.25" max="4" step="0.25" value="2"></div>
-      <div class="field"><label for="dz-loc">Location</label><select id="dz-loc"><option value="indoor">Indoor</option><option value="outdoor">Outdoor, with roof and hoods</option></select></div>
-      <div class="field"><label for="dz-casing">Casing</label><select id="dz-casing"><option value="2">2 in. double-wall</option><option value="4">4 in. double-wall, thermally broken</option></select></div>
     </div>
     <div class="dz-block">
       <p class="label">Sections in the airstream, upstream to downstream</p>
       <ul class="dz-secs" id="dz-secs"></ul>
+    </div>
+    <div class="dz-block">
+      <div class="dz-opt-head"><p class="label">Options</p><button type="button" class="dz-link" id="dz-reset">Reset to standard</button></div>
+      <div id="dz-opts" class="dz-opts"></div>
     </div>
   </div>
 
@@ -60,19 +57,22 @@ page_head([
       <div><dt>Fan array</dt><dd id="r-fans">—</dd></div>
       <div><dt>Total static</dt><dd id="r-tsp">—</dd></div>
       <div><dt>Fan shaft power</dt><dd id="r-bhp">—</dd></div>
-      <div><dt>Coil face velocity</dt><dd id="r-fv">500 fpm</dd></div>
+      <div><dt>Coil face velocity</dt><dd id="r-fv">—</dd></div>
+      <div><dt>Shipping</dt><dd id="r-ship">—</dd></div>
+      <div><dt>Operating weight</dt><dd id="r-wt">—</dd></div>
+      <div><dt>Options</dt><dd id="r-opts">—</dd></div>
     </dl>
     <div class="dz-submit">
       <button type="button" class="btn btn-primary btn-lg" id="dz-send">Submit this design for a quote</button>
       <button type="button" class="btn btn-ghost btn-lg" id="dz-png">Save image</button>
     </div>
-    <p class="muted dz-note">Preliminary sizing at 500 fpm coil face velocity, typical section lengths and 65% fan efficiency. Not for construction. An application engineer sizes the real unit.</p>
+    <p class="muted dz-note">Preliminary sizing from your face velocity limit, typical section lengths and typical fan efficiencies. Weight is a rough estimate. Green joints on the model mark shipping splits. Not for construction. An application engineer sizes the real unit.</p>
   </div>
 </section>
 
 <style>
-.designer{display:grid;grid-template-columns:minmax(0,1fr) 380px;grid-template-areas:"stage panel" "results panel";gap:20px;padding-bottom:40px}
-.dz-stage{grid-area:stage;position:relative;background:linear-gradient(#E9EEE8,#DDE5DD);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;min-height:440px}
+.designer{display:grid;grid-template-columns:minmax(0,1fr) 380px;grid-template-rows:auto 1fr;grid-template-areas:"stage panel" "results panel";gap:20px;padding-bottom:40px;align-items:start}
+.dz-stage{grid-area:stage;position:relative;background:linear-gradient(#E9EEE8,#DDE5DD);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;height:560px}
 .dz-canvas{position:absolute;inset:0;cursor:grab;touch-action:none}
 .dz-canvas:active{cursor:grabbing}
 .dz-overlay{position:absolute;left:14px;right:14px;top:14px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;pointer-events:none}
@@ -102,7 +102,20 @@ input[type=range]{width:100%;accent-color:var(--green)}
 .dz-readout dd small{display:block;font-weight:500;font-size:.8rem;color:var(--ink-3)}
 .dz-submit{display:flex;flex-wrap:wrap;gap:10px}
 .dz-note{font-size:.88rem}
-@media (max-width:1000px){.designer{grid-template-columns:1fr;grid-template-areas:"stage" "panel" "results"}.dz-stage{min-height:360px}}
+.dz-opt-head{display:flex;justify-content:space-between;align-items:center}
+.dz-link{font:inherit;font-size:.85rem;background:none;border:0;color:var(--green-ink);text-decoration:underline;cursor:pointer;padding:0}
+.dz-opts{display:grid;gap:8px}
+.dz-group{border:1.5px solid var(--line);border-radius:8px}
+.dz-group summary{cursor:pointer;padding:10px 12px;font-weight:700;display:flex;justify-content:space-between;gap:10px;list-style-position:inside}
+.dz-group[open] summary{border-bottom:1px solid var(--line)}
+.dz-count{font-family:var(--mono);font-size:.7rem;font-weight:400;color:var(--ink-3);align-self:center}
+.dz-grid{display:grid;gap:10px;padding:12px}
+.dz-grid .field{display:grid;gap:4px}
+.dz-grid label{font-size:.85rem;font-weight:600;color:var(--ink-2)}
+.dz-grid select{font:inherit;font-size:.9rem;padding:7px 8px;border:1.5px solid var(--line);border-radius:6px;background:#fff;width:100%}
+.dz-panel{position:sticky;top:88px;max-height:calc(100vh - 104px);overflow-y:auto;overscroll-behavior:contain}
+.dz-results{align-content:start}
+@media (max-width:1000px){.designer{grid-template-columns:1fr;grid-template-rows:none;grid-template-areas:"stage" "panel" "results"}.dz-stage{height:400px}.dz-panel{position:static;max-height:none;overflow:visible}}
 @media (max-width:600px){.dz-readout{grid-template-columns:repeat(2,minmax(0,1fr))}}
 </style>
 <script type="importmap"><?= json_encode(['imports' => ['three' => url('assets/vendor/three/three.module.js'), 'three/addons/' => url('assets/vendor/three/addons') . '/']], JSON_UNESCAPED_SLASHES) ?></script>

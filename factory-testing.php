@@ -22,6 +22,6 @@ page_head([
   </div>
 </div></section>
 <section class="section"><div class="wrap">
-  <div class="feature"><div class="body"><?= kicker('002', 'in-house') ?><h2>Coils built in our own shop.</h2><p class="lede">We build chilled water, hot water, steam and DX coils in-house, so coil lead times and quality stay under our control.</p></div><?= photo('coil-shop') ?></div>
+  <div class="feature"><div class="body"><?= kicker('002', 'in-house') ?><h2>Coils built in our own shop.</h2><p class="lede">We build chilled water, hot water, steam and DX coils in-house, so coil lead times and quality stay under our control.</p></div><?= photo('coil-closeup') ?></div>
 </div></section>
 <?php page_foot(); ?>

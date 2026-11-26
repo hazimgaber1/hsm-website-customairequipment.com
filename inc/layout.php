@@ -101,6 +101,7 @@ function page_head(array $m): void
             <li><a href="<?= e(url('resources')) ?>"><b>Literature and PDFs</b><span>Downloads</span></a></li>
             <li><a href="<?= e(url('savings-calculator')) ?>"><b>Fan array savings calculator</b><span>Tool</span></a></li>
             <li><a href="<?= e(url('factory-testing')) ?>"><b>Factory and testing</b></a></li>
+            <li><a href="<?= e(url('gallery')) ?>"><b>Photo gallery</b></a></li>
             <li><a href="<?= e(url('faq')) ?>"><b>FAQ</b></a></li>
           </ul></div>
         </li>
@@ -205,6 +206,7 @@ function page_foot(bool $cta = true): void
         <li><a href="<?= e(url('resources')) ?>">Literature and PDFs</a></li>
         <li><a href="<?= e(url('savings-calculator')) ?>">Savings calculator</a></li>
         <li><a href="<?= e(url('factory-testing')) ?>">Factory and testing</a></li>
+        <li><a href="<?= e(url('gallery')) ?>">Photo gallery</a></li>
         <li><a href="<?= e(url('faq')) ?>">FAQ</a></li>
       </ul>
     </div>

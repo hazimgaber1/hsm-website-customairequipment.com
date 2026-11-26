@@ -52,6 +52,18 @@ const PHOTOS = [
     'hospital-penthouse' => ['1461cda7-1e43-438f-ad09-ee4d9b2659ef', '20261117_020553', 'Two custom air handlers in a hospital mechanical penthouse', 1344, 752],
     'data-center'        => ['7b2d64ae-8eaa-41dc-b2df-50731e2d5f00', '20261117_020554', 'Air handlers along the wall of a data hall', 1168, 880],
     'erv-wheel'          => ['43fe07c2-2322-4d9a-aeed-d1493bdec6a4', '20261117_020553', 'Energy recovery wheel seen through an open access door', 1168, 880],
+    'cleanroom-ahu'      => ['f32de0e3-d2cb-4b92-9f8b-de556899ba61', '20261126_214740', 'Stainless steel cleanroom air handler with the HEPA section door open', 1168, 880],
+    'lab-rooftop'        => ['1c019334-9ffb-4bf3-b62f-3d2bd3fd281a', '20261126_214743', 'Custom air handler on a laboratory building roof beside exhaust stacks', 1168, 880],
+    'fab-floor'          => ['2ddbd332-f483-4257-9419-573c25fa2e98', '20261126_214740', 'Workers assembling double-wall casing panels on a steel base on the factory floor', 1344, 752],
+    'coil-closeup'       => ['bece8c01-821d-442b-aa42-bc46ee589171', '20261126_214741', 'Chilled water coil with aluminum fins, copper headers and a stainless drain pan', 1168, 880],
+    'controls-panel'     => ['14a65ab7-1805-4e79-9142-1e688b481734', '20261126_214739', 'Factory-mounted control panel with variable frequency drives and a DDC controller', 1168, 880],
+    'truck-delivery'     => ['f27a0b60-b1d4-4632-9629-0e7ad54fab78', '20261126_214741', 'Shrink-wrapped air handler section leaving the factory on a flatbed truck', 1344, 752],
+    'engineers'          => ['d70e69c9-def2-4506-a1e8-82d23924dbb7', '20261126_214743', 'Two application engineers reviewing an air handler model and drawings', 1168, 880],
+    'plate-hx'           => ['87ce25d9-45b9-4e21-8ab9-1da00403876d', '20261126_214740', 'Fixed plate heat exchanger seen through an open access door', 1168, 880],
+    'school-roof'        => ['b5921f37-6e0b-4224-8410-b3fa16d9e09b', '20261126_214741', 'Outdoor air handlers on a school roof behind a screen wall', 1344, 752],
+    'industrial-exhaust' => ['0c41fa1e-9e8d-4826-9981-1e3619e1782c', '20261126_214739', 'Coated industrial centrifugal exhaust fan connected to plant ductwork', 1168, 880],
+    'startup-tech'       => ['d18ece33-99b4-448a-a01d-4896a8bfdb87', '20261126_214740', 'Technician measuring fan pressure during air handler startup', 1168, 880],
+    'attenuator'         => ['171213f0-620e-4b31-a568-46aafc5d1057', '20261126_214741', 'Perforated baffles inside an air handler sound attenuator', 1168, 880],
 ];
 
 function photo_src(string $key): string
