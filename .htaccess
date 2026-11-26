@@ -6,13 +6,15 @@ ErrorDocument 404 /404.php
 <IfModule mod_rewrite.c>
 RewriteEngine On
 
-# Force HTTPS and the bare domain.
-RewriteCond %{HTTPS} off [OR]
+# Force HTTPS and the bare domain. On AWS the load balancer ends HTTPS and
+# says which scheme the visitor used in X-Forwarded-Proto.
+RewriteCond %{HTTP:X-Forwarded-Proto} =http [OR]
 RewriteCond %{HTTP_HOST} ^www\. [NC]
 RewriteRule ^ https://customairequipment.com%{REQUEST_URI} [L,R=301]
 
 # Private folders.
-RewriteRule ^(data|inc|tools)(/|$) - [F,L]
+RewriteRule ^(data|inc|tools|docker)(/|$) - [F,L]
+RewriteRule ^Dockerfile$ - [F,L]
 RewriteRule (^|/)_ - [F,L]
 
 RewriteRule ^sitemap\.xml$ sitemap.php [L]

@@ -3,7 +3,10 @@
 declare(strict_types=1);
 
 define('ROOT', dirname(__DIR__));
-define('DATA_DIR', ROOT . '/data');
+// Read-only content shipped in git (guide-topics.json).
+define('CONTENT_DIR', ROOT . '/data');
+// Writable files (SQLite database, settings). On AWS this is a mounted EFS folder outside the web root.
+define('DATA_DIR', rtrim((string) (getenv('SITE_DATA_DIR') ?: ROOT . '/data'), '/'));
 
 if (session_status() === PHP_SESSION_NONE && PHP_SAPI !== 'cli') {
     session_set_cookie_params(['httponly' => true, 'samesite' => 'Lax', 'secure' => !empty($_SERVER['HTTPS'])]);

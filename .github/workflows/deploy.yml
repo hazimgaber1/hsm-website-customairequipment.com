@@ -1,0 +1,72 @@
+# Builds the site and deploys it to AWS ECS Fargate (cluster hsm-sites,
+# service customairequipment) on every push to main. Signs in to AWS with a short-lived
+# token (role hsm-sites-github-deploy), no stored keys. Each image is tagged
+# with its commit, so any earlier version can be redeployed.
+name: Deploy to AWS
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - '**.md'
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+concurrency:
+  group: deploy-aws
+  cancel-in-progress: false
+
+env:
+  AWS_REGION: us-west-2
+  ECR_REPO: hsm-sites/customairequipment
+  CLUSTER: hsm-sites
+  SERVICE: customairequipment
+  TASK_FAMILY: hsm-sites-customairequipment
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::569570437015:role/hsm-sites-github-deploy
+          aws-region: ${{ env.AWS_REGION }}
+
+      - id: ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build and push image
+        id: build
+        run: |
+          IMAGE="${{ steps.ecr.outputs.registry }}/$ECR_REPO"
+          TAG="$(date -u +%Y%m%d-%H%M%S)-${GITHUB_SHA::7}"
+          docker build --platform linux/amd64 -t "$IMAGE:$TAG" -t "$IMAGE:latest" .
+          docker push "$IMAGE:$TAG"
+          docker push "$IMAGE:latest"
+          echo "image=$IMAGE:$TAG" >> "$GITHUB_OUTPUT"
+
+      - name: Register task definition with the new image
+        id: td
+        run: |
+          aws ecs describe-task-definition --task-definition "$TASK_FAMILY" --query taskDefinition > current.json
+          jq --arg img "${{ steps.build.outputs.image }}" '
+            .containerDefinitions[0].image = $img
+            | del(.taskDefinitionArn, .revision, .status, .requiresAttributes,
+                  .compatibilities, .registeredAt, .registeredBy)' current.json > new.json
+          ARN=$(aws ecs register-task-definition --cli-input-json file://new.json --query taskDefinition.taskDefinitionArn --output text)
+          echo "arn=$ARN" >> "$GITHUB_OUTPUT"
+
+      - name: Deploy and wait until healthy
+        run: |
+          DESIRED=$(aws ecs describe-services --cluster "$CLUSTER" --services "$SERVICE" --query 'services[0].desiredCount' --output text)
+          [ "$DESIRED" -ge 1 ] 2>/dev/null || DESIRED=1
+          aws ecs update-service --cluster "$CLUSTER" --service "$SERVICE" \
+            --task-definition "${{ steps.td.outputs.arn }}" --desired-count "$DESIRED" >/dev/null
+          aws ecs wait services-stable --cluster "$CLUSTER" --services "$SERVICE"
+          echo "Deployed ${{ steps.build.outputs.image }}"

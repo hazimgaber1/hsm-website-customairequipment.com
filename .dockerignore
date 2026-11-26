@@ -1,0 +1,7 @@
+.git
+.github
+**/.DS_Store
+**/Thumbs.db
+data/site.sqlite*
+data/settings.json
+data/setup-key.txt
