@@ -15,7 +15,7 @@ const GUIDE_PRODUCT_LINKS = [
 
 function guide_meta(string $slug): array
 {
-    $raw = json_decode((string) file_get_contents(DATA_DIR . '/guide-topics.json'), true);
+    $raw = json_decode((string) file_get_contents(CONTENT_DIR . '/guide-topics.json'), true);
     foreach ($raw['guides'] as $g) {
         if ($g['slug'] === $slug) {
             foreach ($raw['categories'] as $c) {

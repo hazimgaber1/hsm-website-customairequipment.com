@@ -128,7 +128,7 @@ function guide_data(): array
 {
     static $d = null;
     if ($d === null) {
-        $raw = json_decode((string) @file_get_contents(DATA_DIR . '/guide-topics.json'), true) ?: ['categories' => [], 'guides' => []];
+        $raw = json_decode((string) @file_get_contents(CONTENT_DIR . '/guide-topics.json'), true) ?: ['categories' => [], 'guides' => []];
         $d = ['categories' => [], 'guides' => []];
         foreach ($raw['categories'] as $c) {
             $d['categories'][$c['slug']] = $c;

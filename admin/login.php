@@ -2,6 +2,13 @@
 require __DIR__ . '/_admin.php';
 
 $hasAdmin = (int) db()->query('SELECT COUNT(*) FROM admins')->fetchColumn() > 0;
+// On AWS the first admin comes from the container's ADMIN_USER / ADMIN_PASSWORD (Secrets Manager).
+$seedUser = (string) getenv('ADMIN_USER');
+$seedPass = (string) getenv('ADMIN_PASSWORD');
+if (!$hasAdmin && $seedUser !== '' && strlen($seedPass) >= 10) {
+    db()->prepare('INSERT INTO admins (username, password_hash, created_at) VALUES (?, ?, ?)')->execute([$seedUser, password_hash($seedPass, PASSWORD_DEFAULT), date('c')]);
+    $hasAdmin = true;
+}
 $keyFile = DATA_DIR . '/setup-key.txt';
 if (!$hasAdmin && !is_file($keyFile)) {
     file_put_contents($keyFile, bin2hex(random_bytes(12)) . "\n");
