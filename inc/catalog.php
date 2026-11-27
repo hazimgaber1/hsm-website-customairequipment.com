@@ -8,13 +8,13 @@ const PRODUCTS = [
         'code'  => 'Series AH',
         'photo' => 'factory-ahu',
         'pdf'   => 'custom-air-equipment-series-ah-data-sheet.pdf',
-        'lede'  => 'Indoor and outdoor air handlers in any arrangement: stacked, split for rigging, or built around a footprint you already have.',
+        'lede'  => 'Indoor and outdoor air handlers in any arrangement: single or double deck, split for rigging, or built around a footprint you already have.',
         'specs' => [
             'Airflow' => '2,000 to 150,000 CFM',
             'Casing' => '2 in. or 4 in. double-wall, thermally broken',
             'Casing leakage' => '1% or less of design airflow',
             'Panel deflection' => 'L/240 at 8 in. w.g.',
-            'Construction' => 'Indoor, outdoor, stacked, split or knockdown',
+            'Construction' => 'Indoor, outdoor, stacked, double-deck, split or knockdown',
         ],
     ],
     'fan-arrays' => [
@@ -92,3 +92,48 @@ const PDF_LIBRARY = [
     ['custom-air-equipment-guide-specification.pdf', 'Guide specification', 'Section 23 73 13 outline for custom AHUs.'],
     ['custom-air-equipment-submittal-checklist.pdf', 'Submittal checklist', 'What we need to quote and what you get back.'],
 ];
+
+// Standard quick-ship models. Fixed configurations built from standard sections, used by the
+// quick-ship page and as starting points in the 3D designer.
+const QUICK_SHIP = [
+    'indoor' => [
+        'name' => 'QS indoor air handler',
+        'prefix' => 'QS-I',
+        'desc' => 'Mixing box, MERV 8 pre-filter, hot water and chilled water coils, EC fan array with one spare fan, MERV 14 final filters.',
+        'esp' => 1.5,
+        'sizes' => [4000, 6000, 8000, 12000, 16000, 20000, 25000, 30000],
+        'sections' => ['mix', 'pre', 'heat', 'cool', 'fan', 'final', 'dis'],
+        'opts' => ['loc' => 'indoor', 'casing' => '2', 'fan' => 'ec', 'red' => 'n1', 'crows' => '6', 'ctrl' => 'bacnet', 'dis' => 'top'],
+    ],
+    'outdoor' => [
+        'name' => 'QS outdoor DOAS',
+        'prefix' => 'QS-O',
+        'desc' => 'Weatherproof 100% outdoor air unit with an enthalpy wheel, MERV 8 and MERV 13 filters, chilled water and hot water coils, EC fan array.',
+        'esp' => 1.25,
+        'sizes' => [3000, 5000, 8000, 12000, 16000, 20000],
+        'sections' => ['mix', 'pre', 'erw', 'heat', 'cool', 'fan', 'final', 'dis'],
+        'opts' => ['loc' => 'outdoor', 'casing' => '2tb', 'fan' => 'ec', 'red' => 'n1', 'ertype' => 'ent', 'finm' => '13', 'ext' => 'gray', 'ctrl' => 'bacnet', 'dis' => 'bottom'],
+    ],
+    'double' => [
+        'name' => 'QS double-deck ERV',
+        'prefix' => 'QS-D',
+        'desc' => 'Stacked supply and exhaust decks around an enthalpy wheel, for tight footprints. Supply and return EC fan arrays, MERV 8 and MERV 14 filters, hot water and chilled water coils.',
+        'esp' => 1.25,
+        'sizes' => [5000, 8000, 12000, 16000, 20000],
+        'sections' => ['mix', 'pre', 'erw', 'heat', 'cool', 'fan', 'final', 'dis'],
+        'opts' => ['deck' => 'double', 'loc' => 'outdoor', 'casing' => '2tb', 'fan' => 'ec', 'red' => 'n1', 'ertype' => 'ent', 'ext' => 'gray', 'ctrl' => 'bacnet', 'dis' => 'end'],
+    ],
+];
+
+const QUICK_SHIP_FANWALLS = [
+    ['QS-FW-22', '2 × 2', '4', 'up to 12,000 CFM', '57 in. × 57 in.'],
+    ['QS-FW-32', '3 × 2', '6', 'up to 18,000 CFM', '84 in. × 57 in.'],
+    ['QS-FW-33', '3 × 3', '9', 'up to 27,000 CFM', '84 in. × 84 in.'],
+    ['QS-FW-43', '4 × 3', '12', 'up to 36,000 CFM', '111 in. × 84 in.'],
+    ['QS-FW-44', '4 × 4', '16', 'up to 48,000 CFM', '111 in. × 111 in.'],
+];
+
+function quick_ship_code(string $line, int $cfm): string
+{
+    return QUICK_SHIP[$line]['prefix'] . '-' . str_pad((string) round($cfm / 1000), 2, '0', STR_PAD_LEFT);
+}

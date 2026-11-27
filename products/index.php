@@ -11,7 +11,7 @@ page_head([
   <div class="wrap">
     <?= kicker('004', 'products') ?>
     <h1>Built to order. Every one.</h1>
-    <p class="lede">Four product lines, each selected and drawn for a single project. Download a data sheet or design a unit in 3D.</p>
+    <p class="lede">Four product lines, each selected and drawn for a single project, plus standard quick-ship models when the schedule is tight. Download a data sheet or design a unit in 3D.</p>
   </div>
 </section>
 <section class="section-tight">
@@ -24,4 +24,10 @@ page_head([
     <?php endforeach; ?>
   </div>
 </section>
+<section class="section-tight"><div class="wrap">
+  <div class="qs-band">
+    <div><?= kicker('qs', 'quick ship') ?><h2>Need it sooner? Quick-ship models.</h2><p>Standard indoor AHUs, outdoor DOAS units, double-deck ERVs and fan wall modules, built from stocked sections.</p></div>
+    <a class="btn btn-signal btn-lg" href="<?= e(url('products/quick-ship')) ?>">See quick-ship models</a>
+  </div>
+</div></section>
 <?php page_foot(); ?>

@@ -26,4 +26,10 @@ page_head([
   <div class="card"><span class="num">02</span><h3>Fits what you have.</h3><p>Footprint-matched units land on existing curbs. Knockdown units fit through existing doors.</p></div>
   <div class="card"><span class="num">03</span><h3>One engineer, start to finish.</h3><p>The person who selected your unit is the one who answers the phone at startup.</p></div>
 </div></section>
+<section class="section-tight"><div class="wrap">
+  <div class="qs-band">
+    <div><?= kicker('qs', 'quick ship') ?><h2>Short on time? Start with a quick-ship model.</h2><p>Standard sizes built from stocked sections, with the same casings and fan arrays. Change anything you need and we'll quote it as custom.</p></div>
+    <a class="btn btn-signal btn-lg" href="<?= e(url('products/quick-ship')) ?>">See quick-ship models</a>
+  </div>
+</div></section>
 <?php page_foot(); ?>

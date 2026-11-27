@@ -32,6 +32,10 @@ $featured = array_slice(array_values(guide_data()['guides']), 0, 6);
     <p class="label">Designed and tested to</p>
     <ul><li>AHRI 430</li><li>AHRI 1350</li><li>ANSI/AMCA 210</li><li>AMCA 300</li><li>UL 1995 / CSA C22.2 No. 236</li><li>ASHRAE 90.1</li><li>ASHRAE 170</li></ul>
   </section>
+  <div class="qs-band" style="margin-top:8px">
+    <div><?= kicker('qs', 'quick ship') ?><h2>Custom when you need it. Quick ship when you don't.</h2><p>Standard air handlers, outdoor DOAS units, double-deck ERVs and fan wall modules are built from sections we keep in stock, for projects that can't wait.</p></div>
+    <a class="btn btn-signal btn-lg" href="<?= e(url('products/quick-ship')) ?>">See quick-ship models</a>
+  </div>
 </div>
 
 <section class="section">

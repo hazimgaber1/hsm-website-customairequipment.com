@@ -346,3 +346,16 @@ html{overflow-x:clip}
 .gallery figure{margin:0;background:#fff;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}
 .gallery img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block}
 .gallery figcaption{padding:12px 14px;font-size:.9rem;color:var(--ink-2)}
+
+/* Spec tables (quick ship) */
+.table-wrap{overflow-x:auto;margin-top:24px;border:1px solid var(--line);border-radius:var(--radius);background:#fff}
+.spec-table{width:100%;border-collapse:collapse;font-size:.95rem}
+.spec-table th{text-align:left;font-family:var(--mono);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3);padding:12px 16px;border-bottom:1px solid var(--line);white-space:nowrap}
+.spec-table td{padding:12px 16px;border-bottom:1px solid var(--line);white-space:nowrap}
+.spec-table tr:last-child td{border-bottom:0}
+.qs-band{background:var(--forest);color:#fff;border-radius:var(--radius);padding:clamp(22px,4vw,40px);display:grid;grid-template-columns:minmax(0,1fr) auto;gap:20px 40px;align-items:center}
+.qs-band h2{color:#fff;margin:6px 0 8px}
+.qs-band p{margin:0;color:#cfe3d4}
+.qs-band .kicker .k-num{border-color:var(--signal);color:var(--signal)}
+.qs-band .kicker .k-txt{color:#cfe3d4}
+@media (max-width:760px){.qs-band{grid-template-columns:1fr}}

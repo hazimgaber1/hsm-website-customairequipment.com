@@ -88,6 +88,7 @@ function page_head(array $m): void
             <?php foreach (PRODUCTS as $slug => $p): ?>
             <li><a href="<?= e(url('products/' . $slug)) ?>"><b><?= e($p['short']) ?></b><span><?= e($p['code']) ?></span></a></li>
             <?php endforeach; ?>
+            <li><a href="<?= e(url('products/quick-ship')) ?>"><b>Quick-ship models</b><span>Ships fast</span></a></li>
             <li><a href="<?= e(url('design')) ?>"><b>Design your unit in 3D</b><span>Configurator</span></a></li>
             <li><a href="<?= e(url('built-to-order')) ?>"><b>Built to order</b><span>How we build</span></a></li>
           </ul></div>
@@ -193,7 +194,7 @@ function page_foot(bool $cta = true): void
     <div class="foot-col">
       <h3>Products</h3>
       <ul>
-        <?php foreach (PRODUCTS as $slug => $p): ?><li><a href="<?= e(url('products/' . $slug)) ?>"><?= e($p['short']) ?></a></li><?php endforeach; ?>
+        <?php foreach (PRODUCTS as $slug => $p): ?><li><a href="<?= e(url('products/' . $slug)) ?>"><?= e($p['short']) ?></a></li><?php endforeach; ?><li><a href="<?= e(url('products/quick-ship')) ?>">Quick-ship models</a></li>
         <li><a href="<?= e(url('design')) ?>">3D unit designer</a></li>
       </ul>
     </div>

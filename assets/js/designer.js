@@ -13,6 +13,7 @@ const reduceMotion = window.matchMedia && matchMedia("(prefers-reduced-motion: r
 const OPTIONS = [
   { group: "Unit and layout", items: [
     { id: "loc", label: "Location", ch: [["indoor", "Indoor"], ["outdoor", "Outdoor, on curb or dunnage"], ["penthouse", "Outdoor with service vestibule"]], def: "indoor" },
+    { id: "deck", label: "Decks", ch: [["single", "Single deck"], ["double", "Double deck (supply below, return and exhaust above)"]], def: "single" },
     { id: "arr", label: "Fan arrangement", ch: [["draw", "Draw-through (fan after coils)"], ["blow", "Blow-through (fan before coils)"]], def: "draw" },
     { id: "fv", label: "Max coil face velocity", ch: [["400", "400 fpm"], ["450", "450 fpm"], ["500", "500 fpm"], ["550", "550 fpm"]], def: "500" },
     { id: "maxh", label: "Height limit", ch: [["0", "No limit"], ["84", "7 ft (door or elevator)"], ["96", "8 ft"], ["120", "10 ft"], ["144", "12 ft"]], def: "0" },
@@ -117,7 +118,7 @@ const PRESETS = {
   industrial:{ label: "Industrial makeup air", cfm: 80000, esp: 1.0, s: ["mix", "pre", "heat", "fan", "dis"], o: { loc: "outdoor", htype: "gas", fan: "dwdi", red: "n", ext: "gray" } },
 };
 
-const state = { cfm: 30000, esp: 2, sel: new Set(PRESETS.hospital.s), cutaway: true, o: {} };
+const state = { cfm: 30000, esp: 2, sel: new Set(PRESETS.hospital.s), cutaway: true, o: {}, qs: null, qsSig: "", preset: "hospital" };
 const optDefaults = () => Object.fromEntries(Object.values(OPT).map((o) => [o.id, o.def]));
 state.o = { ...optDefaults(), ...PRESETS.hospital.o };
 const o = (id) => state.o[id];
@@ -183,7 +184,7 @@ function fanCount(W, H) {
     const score = Math.abs(Math.log((W / cols) / (H / rows))) + (rows * cols - n) * 0.25;
     if (!best || score < best.score) best = { rows, cols, score };
   }
-  return { rows: best.rows, cols: best.cols, n: best.rows * best.cols, base };
+  return { rows: best.rows, cols: best.cols, n, base };
 }
 const casingIn = () => (o("casing") === "4" ? 4 : 2);
 
@@ -194,10 +195,13 @@ function calc() {
   const area = state.cfm / fv; // ft² of coil face
   const wall = casingIn() * 2;
   let hFt = Math.sqrt(area / 1.45), wFt = area / hFt;
-  const maxh = +o("maxh");
+  const dbl = o("deck") === "double";
+  const maxh = +o("maxh") / (dbl ? 1.75 : 1);
   if (maxh && hFt * 12 + 10 + wall > maxh) { hFt = Math.max(2, (maxh - 10 - wall) / 12); wFt = area / hFt; }
   const H = Math.round(hFt * 12 + 10 + wall);
   const W = Math.round(wFt * 12 + 2 + wall);
+  const Hu = dbl ? Math.round(H * 0.75) : 0; // upper (return/exhaust) deck
+  const Ht = H + Hu;
   const isp = secs.reduce((a, s) => a + s.dp, 0);
   const tsp = isp + state.esp;
   const hasFan = state.sel.has("fan");
@@ -213,8 +217,8 @@ function calc() {
   const psf = (casingIn() === 4 ? 7.5 : 5.5) + (/ss/.test(o("liner")) || o("ext") === "ss" ? 0.8 : 0);
   const skin = 2 * ((L * W) + (L * H) + (W * H)) / 144;
   const per = { cool: 9, heat: 4, preh: 4, reheat: 4, erw: 10, fan: 12, rfan: 9, atten: 5, hum: 3, final: 2, hepa: 3, pre: 1, carbon: 8, mix: 3, dis: 1, access: 1, uv: 1, afms: 1 };
-  const weight = skin * psf + secs.reduce((a, s) => a + (per[s.id] || 1) * area * (s.id === "heat" && o("htype") === "gas" ? 2.5 : 1), 0);
-  return { secs, L, W, H, isp, tsp, grid, hasFan, bhp, area, fv, pieces, weight };
+  const weight = skin * psf * (dbl ? 1.6 : 1) + (dbl ? 12 * area : 0) + secs.reduce((a, s) => a + (per[s.id] || 1) * area * (s.id === "heat" && o("htype") === "gas" ? 2.5 : 1), 0);
+  return { secs, L, W, H, Hu, Ht, dbl, isp, tsp, grid, hasFan, bhp, area, fv, pieces, weight };
 }
 
 /* ---------- three.js scene ---------- */
@@ -334,8 +338,10 @@ function fanArray(g, x, L, W, H, grid, small) {
   const { rows, cols } = grid;
   g.add(box(0.08, H, W, M.frame, x + L * 0.18, H / 2, 0));
   const cw = W / cols, ch = H / rows, r = Math.min(cw, ch) * (small ? 0.3 : 0.36);
+  const count = grid.n || rows * cols;
   for (let i = 0; i < rows; i++) for (let j = 0; j < cols; j++) {
     const y = ch * (i + 0.5), z = -W / 2 + cw * (j + 0.5), fx = x + L * 0.18;
+    if (i * cols + j >= count) { g.add(box(0.05, ch * 0.9, cw * 0.9, M.frame, fx + 0.05, y, z)); continue; }
     const cone = new THREE.Mesh(new THREE.CylinderGeometry(r * 0.85, r * 1.05, 0.25, 32, 1, true), M.fan);
     cone.rotation.z = -Math.PI / 2; cone.position.set(fx + 0.15, y, z); g.add(cone);
     const wheel = new THREE.Group(); wheel.position.set(fx + 0.55, y, z);
@@ -388,6 +394,7 @@ const BUILD = {
   },
   erw(g, x, L, W, H) {
     const t = o("ertype");
+    if ((t === "ent" || t === "sen") && o("deck") === "double") return;
     if (t === "ent" || t === "sen") {
       const r = Math.min(W, H) * 0.47;
       const w = cyl(r, 0.8, t === "ent" ? M.wheel : M.alu, "x", 64); w.position.set(x + L / 2, H / 2, 0); g.add(w);
@@ -497,7 +504,7 @@ function build() {
   const shell = new THREE.Group(); unit.add(shell);
   shell.add(box(L, wall, W, o("floor") === "galv" ? M.panel : M.steam, 0, rail + wall / 2, 0));
   shell.add(box(L, H, wall, M.panel, 0, rail + H / 2, -W / 2 + wall / 2));
-  const roof = box(L, wall, W, M.panel, 0, rail + H - wall / 2, 0); roof.userData.cut = true; shell.add(roof);
+  const roof = box(L, wall, W, M.panel, 0, rail + H - wall / 2, 0); roof.userData.cut = !c.dbl; shell.add(roof);
   shell.add(box(wall, H, W, M.panel, -L / 2 + wall / 2, rail + H / 2, 0));
   shell.add(box(wall, H, W, M.panel, L / 2 - wall / 2, rail + H / 2, 0));
   const near = new THREE.Group(); near.userData.cut = true; shell.add(near);
@@ -527,10 +534,29 @@ function build() {
     x += len; xin += s.len;
   });
 
+  // double deck: return/exhaust deck stacked on top, flowing the opposite way
+  const Hu = ft(c.Hu), Hup = Hu - wall * 2, y2 = rail + H;
+  if (c.dbl) {
+    const up = new THREE.Group(); up.position.set(-L / 2, y2 + wall, 0); unit.add(up);
+    shell.add(box(L, Hu, wall, M.panel, 0, y2 + Hu / 2, -W / 2 + wall / 2));
+    const roof2 = box(L, wall, W, M.panel, 0, y2 + Hu - wall / 2, 0); roof2.userData.cut = true; shell.add(roof2);
+    shell.add(box(wall, Hu, W, M.panel, -L / 2 + wall / 2, y2 + Hu / 2, 0));
+    shell.add(box(wall, Hu, W, M.panel, L / 2 - wall / 2, y2 + Hu / 2, 0));
+    near.add(box(L, Hu, wall, M.panel, 0, y2 + Hu / 2, W / 2 - wall / 2));
+    // return filter near the return inlet (downstream end), exhaust fans near the exhaust end
+    BUILD.pre(up, L - 2.2, 1, Wi, Hup);
+    fanArray(up, 1.5, 4, Wi, Hup, { rows: 1, cols: Math.max(2, Math.ceil(state.cfm / 12000)) }, true);
+    near.add(box(2, Math.min(Hup * 0.85, 5), 0.05, M.door, -L / 2 + 3.2, y2 + wall + Math.min(Hup * 0.85, 5) / 2 + 0.15, W / 2 + 0.03));
+    near.add(box(2, Math.min(Hup * 0.85, 5), 0.05, M.door, L / 2 - 2.6, y2 + wall + Math.min(Hup * 0.85, 5) / 2 + 0.15, W / 2 + 0.03));
+    // wheel spans both decks
+    let ex = 0;
+    for (const s of c.secs) { if (s.id === "erw" && /ent|sen/.test(o("ertype"))) { const r = Math.min(W, H + Hu) * 0.46; const w = cyl(r, 0.8, M.wheel, "x", 64); w.position.set(-L / 2 + ex + ft(s.len) / 2, rail + (H + Hu) / 2, 0); unit.add(w); } ex += ft(s.len); }
+  }
+
   // outdoor: roof cap, intake hood, optional service vestibule
   const outdoor = o("loc") !== "indoor";
   if (outdoor) {
-    const cap = box(L + 0.6, 0.25, W + 0.6, M.roof, 0, rail + H + 0.15, 0); cap.rotation.x = 0.02; cap.userData.cut = true; shell.add(cap);
+    const cap = box(L + 0.6, 0.25, W + 0.6, M.roof, 0, rail + H + Hu + 0.15, 0); cap.rotation.x = 0.02; cap.userData.cut = true; shell.add(cap);
     if (o("inlet") === "end") { const hood = box(1.2, H * 0.6, W * 0.9, M.roof, -L / 2 - 0.6, rail + H * 0.55, 0); hood.rotation.z = -0.25; unit.add(hood); }
     if (o("loc") === "penthouse") {
       const vl = 6;
@@ -550,24 +576,29 @@ function build() {
     unit.add(a);
   };
   const V = (a, b, cc) => new THREE.Vector3(a, b, cc);
-  const midY = rail + H / 2, top = rail + H, x0 = -L / 2, x1 = L / 2;
+  const midY = rail + H / 2, top = rail + H + Hu, x0 = -L / 2, x1 = L / 2;
   const mixIdx = c.secs.findIndex((s) => s.id === "mix");
   const mixMid = mixIdx >= 0 ? x0 + ft(c.secs.slice(0, mixIdx).reduce((a, s) => a + s.len, 0) + c.secs[mixIdx].len / 2) : x0 + 1.5;
+  const inlet = c.dbl && o("inlet") === "top" ? "end" : o("inlet");
   // outdoor air
-  if (o("inlet") === "end") arrow(V(x0 - 4.5, midY, 0), V(1, 0, 0), M.air);
-  else if (o("inlet") === "top") arrow(V(mixMid - 0.8, top + 4.5, -W * 0.2), V(0, -1, 0), M.air);
+  if (inlet === "end") arrow(V(x0 - 4.5, midY, 0), V(1, 0, 0), M.air);
+  else if (inlet === "top") arrow(V(mixMid - 0.8, top + 4.5, -W * 0.2), V(0, -1, 0), M.air);
   else arrow(V(mixMid, midY, W / 2 + 4.5), V(0, 0, -1), M.air);
   // return air
-  if (mixIdx >= 0) {
+  if (c.dbl) {
+    const uy = rail + H + Hu / 2;
+    arrow(V(x1 + 4.5, uy, 0), V(-1, 0, 0), M.airRet);
+    arrow(V(x0 - 0.8, uy, 0), V(-1, 0, 0), M.airExh);
+  } else if (mixIdx >= 0) {
     if (o("ret") === "top") arrow(V(mixMid + 0.8, top + 4.5, W * 0.15), V(0, -1, 0), M.airRet);
     else if (o("ret") === "side") arrow(V(mixMid, midY, -W / 2 - 4.5), V(0, 0, 1), M.airRet);
     else arrow(V(mixMid, rail - 0.2, W / 2 + 3.5), V(0, 0.2, -1), M.airRet);
   }
   // relief / exhaust
-  if (o("rfan") !== "none") arrow(V(x0 + 2, top + 1, -W * 0.25), V(0, 1, 0), M.airExh);
+  if (!c.dbl && o("rfan") !== "none") arrow(V(x0 + 2, top + 1, -W * 0.25), V(0, 1, 0), M.airExh);
   // supply
   const sx = disX !== null ? x0 + disX : x1 - 1.5;
-  const op = o("dis");
+  const op = c.dbl && o("dis") === "top" ? "end" : o("dis");
   if (op === "end") { unit.add(box(0.06, H * 0.6, W * 0.6, M.dark, x1 + 0.03, midY, 0)); arrow(V(x1 + 0.8, midY, 0), V(1, 0, 0), M.air); }
   else if (op === "top") { unit.add(Object.assign(box(Math.min(L * 0.15, 2.5), 0.5, W * 0.6, M.frame, sx, top + 0.25, 0), { userData: { cut: true } })); arrow(V(sx, top + 1.0, 0), V(0, 1, 0), M.air); }
   else if (op === "bottom") arrow(V(sx, rail + 0.2, W / 2 + 1), V(0, -0.3, 1), M.air, 2.5);
@@ -595,7 +626,7 @@ function applyCutaway() {
 let view = "iso", framedFor = "";
 function frame(force) {
   const c = lastCalc;
-  const L = c.L / 12 + (o("loc") === "penthouse" ? 6 : 0) || 10, W = c.W / 12 || 6, H = c.H / 12 || 6;
+  const L = c.L / 12 + (o("loc") === "penthouse" ? 6 : 0) || 10, W = c.W / 12 || 6, H = c.Ht / 12 || 6;
   const key = view + "|" + Math.round(L / 3) + "|" + Math.round(W / 2);
   if (!force && key === framedFor) return;
   framedFor = key;
@@ -626,27 +657,91 @@ function animate() {
 }
 
 /* ---------- UI ---------- */
-function buildChips() {
-  $("#dz-secs").innerHTML = SECTIONS.filter((s) => !s.hidden).map((s) =>
-    `<li><button type="button" class="dz-sec" data-id="${s.id}" aria-pressed="false"><span class="tag" aria-hidden="true">+</span><span class="nm">${s.name}</span><span class="meta"></span></button></li>`).join("");
-  $("#dz-secs").addEventListener("click", (e) => {
-    const b = e.target.closest(".dz-sec"); if (!b) return;
-    const id = b.dataset.id;
-    state.sel.has(id) ? state.sel.delete(id) : state.sel.add(id);
-    update();
-  });
+const STEPS = [
+  { t: "Start", d: "Pick a quick-ship standard model or a typical custom unit. You can change anything afterwards.", w: "start" },
+  { t: "Airflow and size", d: "Set the design airflow, the pressure your ductwork needs, and any size limits.", w: "airflow", o: ["fv", "maxh"] },
+  { t: "Layout", d: "Where the unit sits, how many decks it has, and where air comes in and goes out.", o: ["loc", "deck", "arr", "hand", "inlet", "ret", "dis"] },
+  { t: "Sections", d: "Turn sections on or off. They stay in the usual airflow order, and the numbers show length and pressure drop.", w: "sections" },
+  { t: "Casing", d: "Panels, finishes and construction details.", o: ["casing", "ins", "ext", "liner", "floor", "base", "leak", "doors", "seis"] },
+  { t: "Fans and motors", d: "Fan type, redundancy and power supply.", o: ["fan", "red", "bdd", "volt", "rfan"] },
+  { t: "Coils and heating", d: "Cooling, heating and preheat, with fin and coating choices.", o: ["ctype", "crows", "htype", "ptype", "fins", "coat", "pan"] },
+  { t: "Filters and air quality", d: "Filter grades, loading and monitoring.", o: ["prem", "finm", "fint", "hepa", "rack", "gauge", "uvt"] },
+  { t: "Recovery and humidity", d: "Energy recovery type, frost control and humidifier.", o: ["ertype", "frost", "humt"] },
+  { t: "Sound and dampers", d: "Attenuation, dampers and economizer.", o: ["attl", "attt", "damp", "econ"] },
+  { t: "Controls and electrical", d: "Factory controls, power and service lights.", o: ["ctrl", "power", "lights", "sccr"] },
+  { t: "Shipping and testing", d: "How it ships and how we prove it before it leaves.", o: ["split", "kd", "test", "docs"] },
+  { t: "Review and submit", d: "Check the unit, then send it to an application engineer.", w: "review" },
+];
+const QS = window.CAE_QS || {};
+let mode = "guided", step = 0;
+
+const sig = () => JSON.stringify([state.cfm, state.esp, [...state.sel].sort(), state.o]);
+function qsCode(line, cfm) { return QS[line].prefix + "-" + String(Math.round(cfm / 1000)).padStart(2, "0"); }
+function applyQS(line, cfm) {
+  const q = QS[line];
+  state.cfm = cfm; state.esp = q.esp; state.sel = new Set(q.sections);
+  state.o = { ...optDefaults(), ...q.opts };
+  $("#dz-cfm").value = cfm; $("#dz-esp").value = q.esp;
+  state.qs = { line, cfm, code: qsCode(line, cfm), name: q.name };
+  state.qsSig = sig();
+  update();
 }
 
-function buildOptions() {
-  $("#dz-opts").innerHTML = OPTIONS.map((g, gi) => `<details class="dz-group"${gi === 0 ? " open" : ""}><summary>${g.group}<span class="dz-count"></span></summary><div class="dz-grid">` +
-    g.items.map((it) => `<div class="field" data-opt="${it.id}"${it.sec ? ` data-sec="${it.sec}"` : ""}><label for="o-${it.id}">${it.label}</label><select id="o-${it.id}">` +
-      it.ch.map(([v, l]) => `<option value="${v}">${l}</option>`).join("") + `</select></div>`).join("") +
-    `</div></details>`).join("");
-  $("#dz-opts").addEventListener("change", (e) => {
-    const sel = e.target.closest("select"); if (!sel) return;
-    state.o[sel.id.slice(2)] = sel.value;
-    update();
+function fieldHTML(id) {
+  const it = OPT[id];
+  return `<div class="field" data-opt="${id}"${it.sec ? ` data-sec="${it.sec}"` : ""}><label for="o-${id}">${it.label}</label><select id="o-${id}">` +
+    it.ch.map(([v, l]) => `<option value="${v}">${l}</option>`).join("") + `</select></div>`;
+}
+function widgetHTML(w) {
+  if (w === "start") return `
+    <div class="dz-seg" role="group" aria-label="Starting point"><button type="button" data-start="qs" aria-pressed="true">Quick-ship models</button><button type="button" data-start="custom" aria-pressed="false">Custom starting points</button></div>
+    <div class="dz-cards" data-startpane="qs">` + Object.entries(QS).map(([k, q]) => `
+      <div class="dz-card"><span class="dz-badge">Quick ship</span><h4>${q.name}</h4><p>${q.desc}</p>
+        <div class="dz-card-row"><label class="sr" for="qs-${k}">Size</label><select id="qs-${k}">${q.sizes.map((c) => `<option value="${c}">${qsCode(k, c)}, ${fmt(c)} CFM</option>`).join("")}</select>
+        <button type="button" class="btn btn-primary btn-sm" data-qs="${k}">Use model</button></div></div>`).join("") + `</div>
+    <div class="dz-cards" data-startpane="custom" hidden>` + Object.entries(PRESETS).map(([k, p]) => `
+      <button type="button" class="dz-card dz-card-btn" data-preset="${k}"><h4>${p.label}</h4><p>${fmt(p.cfm)} CFM, ${p.s.length} sections</p></button>`).join("") + `</div>`;
+  if (w === "airflow") return `<div class="dz-sliders">
+      <div class="field"><label for="dz-cfm">Airflow <output id="dz-cfm-o"></output></label><input type="range" id="dz-cfm" min="2000" max="120000" step="1000" value="${state.cfm}"></div>
+      <div class="field"><label for="dz-esp">External static <output id="dz-esp-o"></output></label><input type="range" id="dz-esp" min="0.25" max="4" step="0.25" value="${state.esp}"></div></div>`;
+  if (w === "sections") return `<ul class="dz-secs" id="dz-secs">` + SECTIONS.filter((x) => !x.hidden).map((x) =>
+    `<li><button type="button" class="dz-sec" data-id="${x.id}" aria-pressed="false"><span class="tag" aria-hidden="true">+</span><span class="nm">${x.name}</span><span class="meta"></span></button></li>`).join("") + `</ul>`;
+  if (w === "review") return `<div id="dz-review"></div>
+    <div class="dz-submit"><button type="button" class="btn btn-primary btn-lg" id="dz-send">Submit this design for a quote</button><button type="button" class="btn btn-ghost" id="dz-png">Save image</button></div>
+    <p class="muted dz-note">Preliminary sizing from your face velocity limit, typical section lengths and typical fan efficiencies. Weight is a rough estimate. Not for construction. An application engineer sizes the real unit.</p>`;
+  return "";
+}
+
+function buildPanel() {
+  $("#dz-nav").innerHTML = STEPS.map((st, i) => `<li><button type="button" data-goto="${i}" title="${st.t}"><span>${i + 1}</span><b>${st.t}</b></button></li>`).join("");
+  $("#dz-body").innerHTML = STEPS.map((st, i) => `<section class="dz-step" data-step="${i}" aria-labelledby="dz-st-${i}">
+      <p class="dz-step-k">Step ${i + 1} of ${STEPS.length}</p><h3 id="dz-st-${i}">${st.t}</h3><p class="dz-step-d">${st.d}</p>
+      ${st.w ? widgetHTML(st.w) : ""}
+      ${st.o ? `<div class="dz-grid">${st.o.map(fieldHTML).join("")}</div><p class="dz-empty muted" hidden>These options belong to sections that aren't in your unit. Add them in step 4 to set them.</p>` : ""}
+    </section>`).join("");
+}
+
+function showStep() {
+  document.querySelectorAll(".dz-step").forEach((el) => { el.hidden = mode === "guided" && +el.dataset.step !== step; });
+  document.querySelectorAll("#dz-nav button").forEach((b) => {
+    const i = +b.dataset.goto;
+    b.setAttribute("aria-current", mode === "guided" && i === step ? "step" : "false");
+    b.classList.toggle("done", mode === "guided" && i < step);
   });
+  $("#dz-mode-guided").setAttribute("aria-pressed", mode === "guided");
+  $("#dz-mode-all").setAttribute("aria-pressed", mode === "all");
+  $("#dz-back").hidden = mode !== "guided" || step === 0;
+  $("#dz-stepno").textContent = mode === "guided" ? `Step ${step + 1} of ${STEPS.length}: ${STEPS[step].t}` : "All options";
+  const last = mode === "all" || step === STEPS.length - 1;
+  $("#dz-next").textContent = last ? "Submit for a quote" : "Next: " + STEPS[step + 1].t;
+  $("#dz-progress").style.width = (mode === "guided" ? ((step + 1) / STEPS.length) * 100 : 100) + "%";
+  document.querySelector(".designer").dataset.mode = mode;
+}
+function go(i) {
+  step = Math.max(0, Math.min(STEPS.length - 1, i));
+  if (mode === "all") { const el = document.querySelector(`.dz-step[data-step="${i}"]`); el && el.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" }); return; }
+  showStep();
+  $("#dz-body").scrollTop = 0;
 }
 
 function syncOptions() {
@@ -655,15 +750,19 @@ function syncOptions() {
     f.querySelector("select").value = state.o[id];
     f.hidden = sec ? !state.sel.has(sec) : false;
   });
-  document.querySelectorAll(".dz-group").forEach((g) => {
-    const vis = g.querySelectorAll("[data-opt]:not([hidden])").length;
-    g.querySelector(".dz-count").textContent = vis + " options";
+  document.querySelectorAll(".dz-step").forEach((st) => {
+    const e = st.querySelector(".dz-empty"); if (!e) return;
+    e.hidden = st.querySelectorAll("[data-opt]:not([hidden])").length > 0;
   });
+}
+
+function changedOptions() {
+  return Object.keys(OPT).filter((k) => state.o[k] !== OPT[k].def && (!OPT[k].sec || state.sel.has(OPT[k].sec)));
 }
 
 function update() {
   const c = calc();
-  const ids = c.secs.map((s) => s.id);
+  const ids = c.secs.map((x) => x.id);
   document.querySelectorAll(".dz-sec").forEach((b) => {
     const id = b.dataset.id, on = state.sel.has(id), info = secInfo(id);
     b.setAttribute("aria-pressed", on);
@@ -671,40 +770,53 @@ function update() {
     b.querySelector(".nm").textContent = on ? info.name : BY_ID[id].name;
     b.querySelector(".meta").textContent = info.len + "″ · " + info.dp.toFixed(2) + "″";
   });
-  document.querySelectorAll("[data-preset]").forEach((b) => {
-    const p = PRESETS[b.dataset.preset];
-    const match = p.cfm === state.cfm && p.esp === state.esp && p.s.length === state.sel.size && p.s.every((x) => state.sel.has(x));
-    b.setAttribute("aria-pressed", match);
-  });
+  document.querySelectorAll("[data-preset]").forEach((b) => b.setAttribute("aria-pressed", state.preset === b.dataset.preset && !state.qs));
   syncOptions();
+  // quick-ship status
+  const qsOn = state.qs && sig() === state.qsSig;
+  const ban = $("#dz-banner");
+  if (state.qs) {
+    ban.hidden = false;
+    ban.className = "dz-banner " + (qsOn ? "ok" : "warn");
+    ban.innerHTML = qsOn ? `<b>${state.qs.code}</b> quick-ship model. Standard configuration, built from stocked sections.`
+      : `<b>Based on ${state.qs.code}.</b> You've changed it, so it will be quoted as a custom unit. <button type="button" class="dz-link" id="dz-qs-back">Back to ${state.qs.code}</button>`;
+  } else ban.hidden = true;
+  $("#dz-badge").textContent = qsOn ? "Quick ship · " + state.qs.code : state.qs ? "Custom · based on " + state.qs.code : "Custom unit";
+  $("#dz-badge").className = "dz-tag " + (qsOn ? "qs" : "");
+
   $("#dz-cfm-o").textContent = fmt(state.cfm) + " CFM";
   $("#dz-esp-o").textContent = state.esp.toFixed(2) + " in. w.g.";
   $("#r-len").innerHTML = c.secs.length ? ftin(c.L) + `<small>${(c.L * 0.0254).toFixed(2)} m</small>` : "—";
-  $("#r-wh").innerHTML = ftin(c.W) + " × " + ftin(c.H) + `<small>${(c.W * 0.0254).toFixed(2)} × ${(c.H * 0.0254).toFixed(2)} m</small>`;
+  $("#r-wh").innerHTML = ftin(c.W) + " × " + ftin(c.Ht) + `<small>${c.dbl ? "double deck, " : ""}${(c.W * 0.0254).toFixed(2)} × ${(c.Ht * 0.0254).toFixed(2)} m</small>`;
   const fanTxt = { ec: "EC", pm: "PM", plenum: "plenum", dwdi: "DWDI" }[o("fan")];
-  $("#r-fans").innerHTML = c.hasFan ? `${c.grid.n} ${fanTxt} fan${c.grid.n > 1 ? "s" : ""}<small>${c.grid.n > c.grid.base ? c.grid.base + " running + " + (c.grid.n - c.grid.base) + " spare, " : ""}about ${fmt(Math.round(state.cfm / c.grid.base / 100) * 100)} CFM each</small>` : "None<small>add a supply fan</small>";
+  $("#r-fans").innerHTML = c.hasFan ? `${c.grid.n} ${fanTxt} fan${c.grid.n > 1 ? "s" : ""}<small>${c.grid.n > c.grid.base ? c.grid.base + " running + " + (c.grid.n - c.grid.base) + " spare" : "about " + fmt(Math.round(state.cfm / c.grid.base / 100) * 100) + " CFM each"}</small>` : "None<small>add a supply fan</small>";
   $("#r-tsp").innerHTML = c.tsp.toFixed(2) + " in. w.g." + `<small>${c.isp.toFixed(2)} internal</small>`;
   $("#r-bhp").innerHTML = c.hasFan ? c.bhp.toFixed(1) + " bhp" + `<small>${(c.bhp * 0.7457).toFixed(1)} kW at ${o("volt")} V</small>` : "—";
   $("#r-fv").innerHTML = Math.round(state.cfm / c.area) + " fpm" + `<small>${c.area.toFixed(0)} ft² coil face</small>`;
   $("#r-ship").innerHTML = o("kd") === "knockdown" ? "Knockdown<small>panels, assembled on site</small>" : `${c.pieces.length} section${c.pieces.length === 1 ? "" : "s"}<small>longest ${ftin(Math.max(0, ...c.pieces))}</small>`;
   $("#r-wt").innerHTML = c.secs.length ? fmt(Math.round(c.weight / 100) * 100) + " lb" + `<small>about ${fmt(Math.round(c.weight * 0.4536 / 50) * 50)} kg, estimate</small>` : "—";
-  $("#r-opts").innerHTML = Object.keys(OPT).filter((k) => state.o[k] !== OPT[k].def).length + " changed<small>of " + Object.keys(OPT).length + " options</small>";
+
+  const ch = changedOptions();
+  $("#dz-review").innerHTML = `<p class="dz-sum">${summary(c)}</p>
+    <h4>Sections <button type="button" class="dz-link" data-goto="3">Change</button></h4><ol class="dz-rlist">${c.secs.map((x) => `<li>${x.name}</li>`).join("")}</ol>
+    <h4>Options changed from standard (${ch.length})</h4>` +
+    (ch.length ? `<dl class="dz-rdl">${ch.map((k) => `<div><dt>${OPT[k].label}</dt><dd>${OPT[k].ch.find((x) => x[0] === state.o[k])[1]}</dd></div>`).join("")}</dl>` : `<p class="muted">None. Every option is at our standard.</p>`);
   if (renderer) build();
 }
 
 function optionList() {
   const out = {};
+  if (state.qs) out["Model"] = sig() === state.qsSig ? state.qs.code + " (quick ship)" : "Custom, based on " + state.qs.code;
   for (const g of OPTIONS) for (const it of g.items) {
     if (it.sec && !state.sel.has(it.sec)) continue;
-    if (it.id === "attl" || it.id === "attt") { if (!state.sel.has("atten")) continue; }
     out[it.label] = it.ch.find((x) => x[0] === state.o[it.id])[1];
   }
   return out;
 }
 
 function summary(c) {
-  return `${fmt(state.cfm)} CFM at ${state.esp.toFixed(2)} in. w.g. external, ${OPT.loc.ch.find((x) => x[0] === o("loc"))[1].toLowerCase()}, ${OPT.casing.ch.find((x) => x[0] === o("casing"))[1]} casing. ` +
-    `About ${ftin(c.L)} L × ${ftin(c.W)} W × ${ftin(c.H)} H, ${c.tsp.toFixed(2)} in. w.g. total static` +
+  return `${fmt(state.cfm)} CFM at ${state.esp.toFixed(2)} in. w.g. external, ${OPT.loc.ch.find((x) => x[0] === o("loc"))[1].toLowerCase()}${c.dbl ? ", double deck" : ""}, ${OPT.casing.ch.find((x) => x[0] === o("casing"))[1]} casing. ` +
+    `About ${ftin(c.L)} L × ${ftin(c.W)} W × ${ftin(c.Ht)} H, ${c.tsp.toFixed(2)} in. w.g. total static` +
     (c.hasFan ? `, ${c.grid.n}-fan ${OPT.fan.ch.find((x) => x[0] === o("fan"))[1].toLowerCase()} at about ${c.bhp.toFixed(1)} bhp.` : ", no fan section.");
 }
 
@@ -712,38 +824,70 @@ function applyPreset(key) {
   const p = PRESETS[key];
   state.cfm = p.cfm; state.esp = p.esp; state.sel = new Set(p.s);
   state.o = { ...optDefaults(), ...p.o };
+  state.qs = null; state.preset = key;
   $("#dz-cfm").value = p.cfm; $("#dz-esp").value = p.esp;
   update();
 }
 
+function submit() {
+  const c = calc();
+  const design = {
+    cfm: state.cfm, external_static: state.esp,
+    model: state.qs ? (sig() === state.qsSig ? state.qs.code : "custom (based on " + state.qs.code + ")") : "custom",
+    sections: c.secs.map((x) => x.name),
+    options: optionList(),
+    length_in: c.L, width_in: c.W, height_in: c.Ht, total_static: +c.tsp.toFixed(2),
+    fans: c.hasFan ? c.grid.n : 0, bhp: c.hasFan ? +c.bhp.toFixed(1) : 0,
+    shipping_sections: c.pieces.length, weight_lb: Math.round(c.weight),
+    summary: (state.qs && sig() === state.qsSig ? "Quick-ship model " + state.qs.code + ". " : "") + summary(c),
+  };
+  try { sessionStorage.setItem("cae-design", JSON.stringify(design)); } catch (e) {}
+  location.href = window.CAE_CONTACT_URL || "/contact";
+}
+
 function wire() {
-  $("#dz-presets").innerHTML = Object.entries(PRESETS).map(([k, p]) => `<button type="button" class="dz-chip" data-preset="${k}">${p.label}</button>`).join("");
-  buildChips();
-  buildOptions();
-  document.querySelectorAll("[data-preset]").forEach((b) => b.addEventListener("click", () => applyPreset(b.dataset.preset)));
+  buildPanel();
+  const root = document.querySelector(".designer");
+  root.addEventListener("change", (e) => {
+    const sel = e.target.closest("select[id^='o-']"); if (!sel) return;
+    state.o[sel.id.slice(2)] = sel.value; update();
+  });
+  root.addEventListener("click", (e) => {
+    const t = e.target.closest("button"); if (!t) return;
+    if (t.dataset.goto !== undefined) return go(+t.dataset.goto);
+    if (t.dataset.preset) return applyPreset(t.dataset.preset);
+    if (t.dataset.qs) return applyQS(t.dataset.qs, +$("#qs-" + t.dataset.qs).value);
+    if (t.id === "dz-qs-back") return applyQS(state.qs.line, state.qs.cfm);
+    if (t.dataset.start) {
+      document.querySelectorAll("[data-start]").forEach((x) => x.setAttribute("aria-pressed", x === t));
+      document.querySelectorAll("[data-startpane]").forEach((x) => (x.hidden = x.dataset.startpane !== t.dataset.start));
+      return;
+    }
+    if (t.classList.contains("dz-sec")) { const id = t.dataset.id; state.sel.has(id) ? state.sel.delete(id) : state.sel.add(id); return update(); }
+    if (t.dataset.mode) { mode = t.dataset.mode; showStep(); return; }
+    if (t.dataset.view) {
+      view = t.dataset.view;
+      document.querySelectorAll("[data-view]").forEach((x) => x.setAttribute("aria-pressed", x === t));
+      if (renderer) frame(true);
+    }
+  });
   $("#dz-cfm").addEventListener("input", (e) => { state.cfm = +e.target.value; update(); });
   $("#dz-esp").addEventListener("input", (e) => { state.esp = +e.target.value; update(); });
   $("#dz-cutaway").addEventListener("change", (e) => { state.cutaway = e.target.checked; applyCutaway(); });
   $("#dz-reset").addEventListener("click", () => { state.o = { ...optDefaults() }; update(); });
-  document.querySelectorAll("[data-view]").forEach((b) => b.addEventListener("click", () => {
-    view = b.dataset.view;
-    document.querySelectorAll("[data-view]").forEach((x) => x.setAttribute("aria-pressed", x === b));
-    if (renderer) frame(true);
-  }));
-  $("#dz-send").addEventListener("click", () => {
-    const c = calc();
-    const design = {
-      cfm: state.cfm, external_static: state.esp,
-      sections: c.secs.map((s) => s.name),
-      options: optionList(),
-      length_in: c.L, width_in: c.W, height_in: c.H, total_static: +c.tsp.toFixed(2),
-      fans: c.hasFan ? c.grid.n : 0, bhp: c.hasFan ? +c.bhp.toFixed(1) : 0,
-      shipping_sections: c.pieces.length, weight_lb: Math.round(c.weight),
-      summary: summary(c),
-    };
-    try { sessionStorage.setItem("cae-design", JSON.stringify(design)); } catch (e) {}
-    location.href = window.CAE_CONTACT_URL || "/contact";
-  });
+  $("#dz-back").addEventListener("click", () => go(step - 1));
+  $("#dz-next").addEventListener("click", () => (mode === "all" || step === STEPS.length - 1 ? submit() : go(step + 1)));
+  $("#dz-send").addEventListener("click", submit);
+  const full = $("#dz-full");
+  const setFull = (on) => {
+    root.classList.toggle("dz-fullscreen", on);
+    document.documentElement.classList.toggle("dz-lock", on);
+    full.setAttribute("aria-pressed", on);
+    full.textContent = on ? "Exit full screen" : "Full screen";
+    setTimeout(() => { resize && renderer && resize(); frame(true); }, 50);
+  };
+  full.addEventListener("click", () => setFull(!root.classList.contains("dz-fullscreen")));
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape" && root.classList.contains("dz-fullscreen")) setFull(false); });
   $("#dz-png").addEventListener("click", () => {
     if (!renderer) return;
     renderer.render(scene, camera);
@@ -752,6 +896,7 @@ function wire() {
     a.href = renderer.domElement.toDataURL("image/png");
     a.click();
   });
+  showStep();
 }
 
 wire();
@@ -763,3 +908,8 @@ try {
 }
 lastCalc = calc();
 update();
+{
+  const m = new URLSearchParams(location.search).get("model");
+  const hit = m && Object.entries(QS).flatMap(([k, q]) => q.sizes.map((c) => [k, c])).find(([k, c]) => qsCode(k, c) === m.toUpperCase());
+  if (hit) { applyQS(hit[0], hit[1]); go(1); }
+}
