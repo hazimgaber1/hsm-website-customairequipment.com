@@ -3,6 +3,7 @@
 
 const SETTINGS_DEFAULTS = [
     'company_name'   => 'Custom Air Equipment',
+    'google_site_verification' => '',
     'parent_line'    => 'An HSM Company',
     'site_url'       => 'https://customairequipment.com',
     'phone'          => '1-800-716-8955',

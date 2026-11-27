@@ -48,6 +48,8 @@ function page_head(array $m): void
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-JM96FQ7BFH');</script>
 <title><?= e($title) ?></title>
 <meta name="description" content="<?= e($desc) ?>">
+<?php if (setting('google_site_verification') !== ''): ?><meta name="google-site-verification" content="<?= e(preg_replace('~^.*content="([^"]+)".*$~', '$1', setting('google_site_verification'))) ?>">
+<?php endif; ?>
 <?php if (!empty($m['noindex'])): ?><meta name="robots" content="noindex">
 <?php endif; ?>
 <link rel="canonical" href="<?= e($canonical) ?>">

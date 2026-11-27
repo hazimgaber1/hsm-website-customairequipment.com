@@ -2,7 +2,7 @@
 // XML sitemap of every public page, built from the files on disk.
 require __DIR__ . '/inc/bootstrap.php';
 header('Content-Type: application/xml; charset=utf-8');
-$skip = ['404', 'thank-you', 'newsletter-submit', 'quote-submit', 'sitemap'];
+$skip = ['404', 'thank-you', 'newsletter-submit', 'quote-submit', 'sitemap', 'cron'];
 $urls = [];
 $it = new RecursiveIteratorIterator(new RecursiveDirectoryIterator(ROOT, FilesystemIterator::SKIP_DOTS));
 foreach ($it as $f) {

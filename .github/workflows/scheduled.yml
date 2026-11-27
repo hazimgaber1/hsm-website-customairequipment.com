@@ -1,0 +1,21 @@
+# Daily jobs on the live site: pulls Google Search Console data, stores it for the admin panel
+# and forwards it to the HSM ERP. Needs the CRON_TOKEN repository secret, matching the
+# CRON_TOKEN environment variable on the running site.
+name: Daily site jobs
+
+on:
+  schedule:
+    - cron: '30 10 * * *'
+  workflow_dispatch:
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Sync Search Console to the site and ERP
+        env:
+          CRON_TOKEN: ${{ secrets.CRON_TOKEN }}
+        run: |
+          if [ -z "$CRON_TOKEN" ]; then echo "CRON_TOKEN secret is not set; skipping."; exit 0; fi
+          curl -sS --fail-with-body --max-time 300 -H "X-Cron-Token: $CRON_TOKEN" https://customairequipment.com/cron

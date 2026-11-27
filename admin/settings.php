@@ -6,6 +6,7 @@ $labels = [
     'email' => 'Public email', 'quote_email' => 'Send quote requests to', 'mail_from' => 'Send email from',
     'address' => 'Plant and office address', 'hours' => 'Office hours', 'tagline' => 'Footer tagline',
     'linkedin_url' => 'LinkedIn URL', 'youtube_url' => 'YouTube URL', 'announcement' => 'Announcement bar (blank to hide)',
+    'google_site_verification' => 'Google Search Console verification code',
 ];
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $vals = [];

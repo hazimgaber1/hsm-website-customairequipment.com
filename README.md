@@ -30,6 +30,18 @@ To try it locally: `php -S 127.0.0.1:8080 tools/router.php`
 2. Read that key on the server, enter it with a username and password (12+ characters) to create the first admin.
 3. Delete `data/setup-key.txt`. Add more admins under **Account**.
 
+## Google Search Console
+
+Every public page is listed in `/sitemap.xml`, and the site submits that sitemap to Search Console each Monday.
+
+1. Add `customairequipment.com` as a Domain property in Search Console and verify it with the DNS record Google gives you. (For a URL-prefix property instead, paste the HTML tag's code into Admin > Settings > Google Search Console verification code.)
+2. In Google Cloud, turn on the Search Console API, create a service account and download its JSON key.
+3. In Search Console, add the service account's email as an **Owner** of the property.
+4. On the server (the Fargate task), set `GSC_CREDENTIALS` to the JSON key (or `GSC_CREDENTIALS_FILE` to its path), `CRON_TOKEN` to a long random string, and optionally `GSC_SITE` (defaults to `sc-domain:customairequipment.com`).
+5. In GitHub, add the same `CRON_TOKEN` as a repository secret. `.github/workflows/scheduled.yml` then calls `/cron` daily.
+
+Each run pulls the last few finished days of clicks, impressions, CTR and position by page, query, device and country, stores them in SQLite (`gsc_rows`) and sends them to the HSM ERP as `search_console` events on `/api/track`, in chunks of 500 rows. Admin > Search Console shows the totals, top queries and pages, the sync log, and buttons to sync or submit the sitemap by hand.
+
 ## Photos
 
 The photos were generated for this site and are currently loaded from the image generator's CDN. To serve them from the site instead, run `php tools/fetch-images.php` from a machine with internet access and commit `assets/img/*.png`. The site uses local files automatically when they exist.

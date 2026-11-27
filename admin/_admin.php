@@ -26,7 +26,7 @@ function require_admin(): array
 
 function admin_head(string $title, array $u): void
 {
-    $nav = ['admin' => 'Dashboard', 'admin/quotes' => 'Quote requests', 'admin/subscribers' => 'Subscribers', 'admin/settings' => 'Company details', 'admin/account' => 'Account'];
+    $nav = ['admin' => 'Dashboard', 'admin/quotes' => 'Quote requests', 'admin/subscribers' => 'Subscribers', 'admin/search' => 'Search Console', 'admin/settings' => 'Company details', 'admin/account' => 'Account'];
     $here = trim(parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH) ?? '', '/');
     ?>
 <!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex">

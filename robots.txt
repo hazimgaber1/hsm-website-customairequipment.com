@@ -1,3 +1,4 @@
 User-agent: *
 Disallow: /admin/
+Disallow: /cron
 Sitemap: https://customairequipment.com/sitemap.xml

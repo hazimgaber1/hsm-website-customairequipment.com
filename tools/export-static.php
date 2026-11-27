@@ -20,7 +20,7 @@ if (($argv[1] ?? '') === '--page') {
 $out = rtrim($argv[1] ?? '', '/');
 if ($out === '') { fwrite(STDERR, "usage: php tools/export-static.php OUT_DIR\n"); exit(1); }
 
-$skip = '~^(inc|admin|tools|data|assets)/|(^|/)_|^(quote-submit|newsletter-submit|sitemap)\.php$~';
+$skip = '~^(inc|admin|tools|data|assets)/|(^|/)_|^(quote-submit|newsletter-submit|sitemap|cron)\.php$~';
 $it = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($root, FilesystemIterator::SKIP_DOTS));
 $n = 0;
 foreach ($it as $f) {
