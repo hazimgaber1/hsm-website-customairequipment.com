@@ -21,9 +21,9 @@ RewriteRule ^sitemap\.xml$ sitemap.php [L]
 
 # /page.php -> /page (one canonical URL per page).
 RewriteCond %{THE_REQUEST} \s/+(.+?)\.php[\s?] [NC]
-RewriteRule ^ /%1 [R=301,L]
+RewriteRule ^ https://customairequipment.com/%1 [R=301,L]
 RewriteCond %{THE_REQUEST} \s/+(.*/)?index[\s?] [NC]
-RewriteRule ^ /%1 [R=301,L]
+RewriteRule ^ https://customairequipment.com/%1 [R=301,L]
 
 # /page -> page.php
 RewriteCond %{REQUEST_FILENAME} !-d
