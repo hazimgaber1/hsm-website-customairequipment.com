@@ -108,6 +108,29 @@ function redirect(string $to): never
     exit;
 }
 
+// HSM ERP reporting (Reports and CRM). The site key is public by design.
+const ERP_BASE = 'https://erp.hsmglobal.ca';
+const ERP_SITE_KEY = 'hsk_53bf5820677c444a1d667dc330c847c7';
+
+/** Sends one event (lead, signup, activity) to the HSM ERP. Never blocks the visitor for long or throws. */
+function erp_track(array $event): void
+{
+    try {
+        $ctx = stream_context_create(['http' => [
+            'method' => 'POST',
+            'header' => "Content-Type: application/json\r\nX-Site-Key: " . ERP_SITE_KEY . "\r\n",
+            'content' => json_encode($event, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE),
+            'timeout' => 5,
+            'ignore_errors' => true,
+        ]]);
+        if (@file_get_contents(ERP_BASE . '/api/track', false, $ctx) === false) {
+            error_log('ERP track failed: ' . ($event['type'] ?? '?'));
+        }
+    } catch (Throwable $e) {
+        error_log('ERP track failed: ' . $e->getMessage());
+    }
+}
+
 function post(string $key, int $max = 2000): string
 {
     return mb_substr(trim((string) ($_POST[$key] ?? '')), 0, $max);

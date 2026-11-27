@@ -67,6 +67,7 @@ function page_head(array $m): void
 <?php foreach ($schema as $s): ?>
 <script type="application/ld+json"><?= json_encode($s, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) ?></script>
 <?php endforeach; ?>
+<script src="<?= e(ERP_BASE) ?>/track.js" data-site="<?= e(ERP_SITE_KEY) ?>" async></script>
 </head>
 <body class="<?= e($m['body_class'] ?? '') ?>">
 <a class="skip" href="#main">Skip to content</a>

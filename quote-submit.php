@@ -62,4 +62,18 @@ $lines[] = 'Open in the admin panel: ' . abs_url('admin/quote?id=' . $id);
 send_mail(setting('quote_email'), 'Quote request #' . $id . ' from ' . $in['name'], implode("\n", $lines), $in['email']);
 send_mail($in['email'], 'We received your request', "Hi {$in['name']},\n\nThanks for contacting " . setting('company_name') . ". An application engineer will call you within one business day.\n\nYour reference number is #$id.\n\n" . setting('company_name') . "\n" . setting('phone'));
 
+// Copy to the HSM ERP CRM as a lead (the email above stays the main notification).
+$extra = [];
+foreach (['company', 'role', 'project_type', 'location', 'cfm', 'timeline'] as $k) {
+    if ($in[$k] !== '') {
+        $extra[] = ucfirst(str_replace('_', ' ', $k)) . ': ' . $in[$k];
+    }
+}
+if ($design) {
+    $extra[] = '3D design: ' . (json_decode($design, true)['summary'] ?? 'attached in the admin panel');
+}
+$extra[] = 'Quote #' . $id . ': ' . abs_url('admin/quote?id=' . $id);
+erp_track(['type' => 'lead', 'label' => 'Quote request', 'name' => $in['name'], 'email' => $in['email'], 'phone' => $in['phone'],
+    'message' => implode("\n", $extra) . ($in['details'] !== '' ? "\n\n" . $in['details'] : ''), 'path' => '/' . ltrim($in['source_page'] ?: 'contact', '/')]);
+
 redirect(url('thank-you'));

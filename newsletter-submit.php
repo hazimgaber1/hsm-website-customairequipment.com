@@ -3,7 +3,11 @@ require __DIR__ . '/inc/bootstrap.php';
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && csrf_ok() && post('website') === '') {
     $email = post('email', 160);
     if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        db()->prepare('INSERT OR IGNORE INTO subscribers (created_at, email) VALUES (?, ?)')->execute([date('c'), strtolower($email)]);
+        $ins = db()->prepare('INSERT OR IGNORE INTO subscribers (created_at, email) VALUES (?, ?)');
+        $ins->execute([date('c'), strtolower($email)]);
+        if ($ins->rowCount() > 0) {
+            erp_track(['type' => 'signup', 'label' => 'Newsletter', 'email' => strtolower($email)]);
+        }
     }
 }
 page_head(['title' => 'Subscribed', 'description' => 'Newsletter subscription.', 'path' => 'newsletter-submit', 'noindex' => true]);
